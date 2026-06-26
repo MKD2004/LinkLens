@@ -2,10 +2,12 @@ import { Router } from "express";
 import jwt from "jsonwebtoken";
 import { customAlphabet } from "nanoid";
 import Link from "../models/Link.js";
+import ClickEvent from "../models/ClickEvent.js";
 import redis from "../services/redis.js";
 import recordClick from "../services/clickTracker.js";
 import { shortenLimiter, redirectLimiter } from "../middleware/rateLimiter.js";
 import validate, { createLinkSchema } from "../middleware/validate.js";
+import auth from "../middleware/auth.js";
 
 const router = Router();
 const nanoid = customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 6);
@@ -87,6 +89,70 @@ router.get("/r/:shortId", redirectLimiter, async (req, res) => {
 
     res.redirect(301, link.originalUrl);
     recordClick(shortId, req);
+  } catch (error) {
+    res.status(500).json({ error: "server_error", message: error.message });
+  }
+});
+
+router.get("/api/links", auth, async (req, res) => {
+  try {
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.min(50, Math.max(1, parseInt(req.query.limit) || 10));
+    const skip = (page - 1) * limit;
+
+    const [links, total] = await Promise.all([
+      Link.find({ userId: req.user.userId }).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+      Link.countDocuments({ userId: req.user.userId }),
+    ]);
+
+    const linkIds = links.map((l) => l.shortId);
+    const counts = await ClickEvent.aggregate([
+      { $match: { shortId: { $in: linkIds } } },
+      { $group: { _id: "$shortId", count: { $sum: 1 } } },
+    ]);
+    const countMap = Object.fromEntries(counts.map((c) => [c._id, c.count]));
+
+    const result = links.map((l) => ({ ...l, clickCount: countMap[l.shortId] ?? 0 }));
+
+    res.json({ links: result, total, page, totalPages: Math.ceil(total / limit) });
+  } catch (error) {
+    res.status(500).json({ error: "server_error", message: error.message });
+  }
+});
+
+router.patch("/api/links/:shortId/toggle", auth, async (req, res) => {
+  try {
+    const { shortId } = req.params;
+    const link = await Link.findOne({ shortId, userId: req.user.userId });
+    if (!link) {
+      return res.status(403).json({ error: "forbidden", message: "Link not found or not yours" });
+    }
+
+    link.isActive = !link.isActive;
+    await link.save();
+    await clearLinkCache(shortId);
+
+    res.json({ shortId, isActive: link.isActive });
+  } catch (error) {
+    res.status(500).json({ error: "server_error", message: error.message });
+  }
+});
+
+router.delete("/api/links/:shortId", auth, async (req, res) => {
+  try {
+    const { shortId } = req.params;
+    const link = await Link.findOne({ shortId, userId: req.user.userId });
+    if (!link) {
+      return res.status(403).json({ error: "forbidden", message: "Link not found or not yours" });
+    }
+
+    await Promise.all([
+      Link.deleteOne({ shortId, userId: req.user.userId }),
+      ClickEvent.deleteMany({ shortId }),
+      clearLinkCache(shortId),
+    ]);
+
+    res.json({ message: "Link deleted" });
   } catch (error) {
     res.status(500).json({ error: "server_error", message: error.message });
   }
