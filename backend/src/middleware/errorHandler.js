@@ -1,6 +1,10 @@
 export default function errorHandler(err, req, res, next) {
   console.error(`[${new Date().toISOString()}] ${err.message}`);
 
+  if (err.status || err.statusCode) {
+    return res.status(err.status ?? err.statusCode).json({ error: "request_error", message: err.message });
+  }
+
   if (err.name === "ValidationError") {
     return res.status(400).json({ error: "validation_error", message: err.message });
   }
