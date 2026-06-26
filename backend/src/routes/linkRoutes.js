@@ -5,11 +5,12 @@ import Link from "../models/Link.js";
 import redis from "../services/redis.js";
 import recordClick from "../services/clickTracker.js";
 import { shortenLimiter, redirectLimiter } from "../middleware/rateLimiter.js";
+import validate, { createLinkSchema } from "../middleware/validate.js";
 
 const router = Router();
 const nanoid = customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 6);
 
-router.post("/api/links", shortenLimiter, async (req, res) => {
+router.post("/api/links", shortenLimiter, validate(createLinkSchema), async (req, res) => {
   try {
     let userId = null;
     const authHeader = req.headers.authorization;
@@ -24,26 +25,9 @@ router.post("/api/links", shortenLimiter, async (req, res) => {
 
     const { url, customAlias, expiresAt } = req.body;
 
-    if (!url) {
-      return res.status(400).json({ error: "validation_error", message: "URL is required" });
-    }
-
-    try {
-      new URL(url);
-    } catch {
-      return res.status(400).json({ error: "validation_error", message: "Invalid URL" });
-    }
-
-    if (!url.startsWith("http://") && !url.startsWith("https://")) {
-      return res.status(400).json({ error: "validation_error", message: "URL must start with http:// or https://" });
-    }
-
     let shortId;
 
     if (customAlias) {
-      if (!/^[a-zA-Z0-9-]+$/.test(customAlias)) {
-        return res.status(400).json({ error: "validation_error", message: "Custom alias must be alphanumeric or hyphens only" });
-      }
       const existing = await Link.findOne({ shortId: customAlias });
       if (existing) {
         return res.status(409).json({ error: "conflict", message: "Custom alias already taken" });
