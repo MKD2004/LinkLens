@@ -1,0 +1,115 @@
+import { Router } from "express";
+import jwt from "jsonwebtoken";
+import { customAlphabet } from "nanoid";
+import Link from "../models/Link.js";
+import redis from "../services/redis.js";
+import recordClick from "../services/clickTracker.js";
+import { shortenLimiter, redirectLimiter } from "../middleware/rateLimiter.js";
+
+const router = Router();
+const nanoid = customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 6);
+
+router.post("/api/links", shortenLimiter, async (req, res) => {
+  try {
+    let userId = null;
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      try {
+        const decoded = jwt.verify(authHeader.split(" ")[1], process.env.JWT_SECRET);
+        userId = decoded.userId;
+      } catch {
+        // anonymous — ignore invalid token
+      }
+    }
+
+    const { url, customAlias, expiresAt } = req.body;
+
+    if (!url) {
+      return res.status(400).json({ error: "validation_error", message: "URL is required" });
+    }
+
+    try {
+      new URL(url);
+    } catch {
+      return res.status(400).json({ error: "validation_error", message: "Invalid URL" });
+    }
+
+    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+      return res.status(400).json({ error: "validation_error", message: "URL must start with http:// or https://" });
+    }
+
+    let shortId;
+
+    if (customAlias) {
+      if (!/^[a-zA-Z0-9-]+$/.test(customAlias)) {
+        return res.status(400).json({ error: "validation_error", message: "Custom alias must be alphanumeric or hyphens only" });
+      }
+      const existing = await Link.findOne({ shortId: customAlias });
+      if (existing) {
+        return res.status(409).json({ error: "conflict", message: "Custom alias already taken" });
+      }
+      shortId = customAlias;
+    } else {
+      let collision = true;
+      while (collision) {
+        shortId = nanoid();
+        collision = await Link.findOne({ shortId });
+      }
+    }
+
+    const linkData = { shortId, originalUrl: url, userId, expiresAt: expiresAt || null };
+    if (customAlias) linkData.customAlias = customAlias;
+    const link = await Link.create(linkData);
+
+    res.status(201).json({
+      shortId: link.shortId,
+      shortUrl: `${process.env.BASE_URL}/r/${link.shortId}`,
+      originalUrl: link.originalUrl,
+      createdAt: link.createdAt,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "server_error", message: error.message });
+  }
+});
+
+router.get("/r/:shortId", redirectLimiter, async (req, res) => {
+  try {
+    const { shortId } = req.params;
+
+    const cached = await redis.get(`link:${shortId}`);
+    if (cached) {
+      console.log(`Cache HIT: ${shortId}`);
+      res.redirect(301, cached);
+      recordClick(shortId, req);
+      return;
+    }
+
+    const link = await Link.findOne({ shortId });
+
+    if (!link) {
+      return res.status(404).json({ error: "not_found", message: "Short link not found" });
+    }
+
+    if (!link.isActive) {
+      return res.status(403).json({ error: "inactive", message: "This link is inactive" });
+    }
+
+    if (link.expiresAt && link.expiresAt < new Date()) {
+      return res.status(410).json({ error: "expired", message: "This link has expired" });
+    }
+
+    await redis.setex(`link:${shortId}`, 86400, link.originalUrl);
+    console.log(`Cache MISS — cached: ${shortId}`);
+
+    res.redirect(301, link.originalUrl);
+    recordClick(shortId, req);
+  } catch (error) {
+    res.status(500).json({ error: "server_error", message: error.message });
+  }
+});
+
+export async function clearLinkCache(shortId) {
+  await redis.del(`link:${shortId}`);
+}
+
+export default router;
