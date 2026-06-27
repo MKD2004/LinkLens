@@ -8,6 +8,7 @@ import connectDB from "./config/db.js";
 import redis from "./services/redis.js";
 import authRoutes from "./routes/authRoutes.js";
 import linkRoutes from "./routes/linkRoutes.js";
+import analyticsRoutes from "./routes/analyticsRoutes.js";
 import errorHandler from "./middleware/errorHandler.js";
 
 const app = express();
@@ -30,6 +31,7 @@ app.use(express.json({ limit: "10kb" }));
 
 app.use("/api/auth", authRoutes);
 app.use("/", linkRoutes);
+app.use("/api", analyticsRoutes);
 
 app.get("/api/health", async (req, res) => {
   const mongoOk = mongoose.connection.readyState === 1;
