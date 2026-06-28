@@ -2,6 +2,7 @@ import { createHash } from "crypto";
 import { UAParser } from "ua-parser-js";
 import ClickEvent from "../models/ClickEvent.js";
 import lookupIP from "./geoip.js";
+import { emitClick } from "./sse.js";
 
 export default async function recordClick(shortId, req) {
   try {
@@ -26,7 +27,7 @@ export default async function recordClick(shortId, req) {
       }
     }
 
-    await ClickEvent.create({
+    const clickData = {
       shortId,
       ip: hashedIp,
       country,
@@ -35,6 +36,18 @@ export default async function recordClick(shortId, req) {
       browser,
       referer,
       timestamp: new Date(),
+    };
+
+    await ClickEvent.create(clickData);
+
+    emitClick(shortId, {
+      type: "click",
+      shortId,
+      timestamp: clickData.timestamp,
+      country: clickData.country,
+      device: clickData.device,
+      browser: clickData.browser,
+      referer: clickData.referer,
     });
   } catch (err) {
     console.error("Click recording error:", err.message);
