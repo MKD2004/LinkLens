@@ -16,11 +16,20 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",").map((o) => o.trim()) ?? [];
+const isDev = process.env.NODE_ENV !== "production";
+
+function isAllowedOrigin(origin) {
+  if (!origin) return true; // non-browser requests (curl, server-to-server, same-origin)
+  if (allowedOrigins.includes(origin)) return true;
+  // In development, accept any localhost / 127.0.0.1 port — Vite shifts 5173 → 5174 when a port is taken.
+  if (isDev && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return true;
+  return false;
+}
 
 app.use(helmet());
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) callback(null, true);
+    if (isAllowedOrigin(origin)) callback(null, true);
     else callback(new Error("Not allowed by CORS"));
   },
   credentials: true,
