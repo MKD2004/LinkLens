@@ -23,19 +23,25 @@ export default function Login() {
     setLoading(true)
     try {
       const endpoint = tab === 'login' ? '/api/auth/login' : '/api/auth/register'
-      const payload = tab === 'login' ? { email, password } : { name, email, password }
+      const payload = tab === 'login'
+        ? { email: email.trim(), password }
+        : { name, email: email.trim(), password }
       const { data } = await api.post(endpoint, payload)
       login(data.token, data.user)
       navigate('/dashboard')
     } catch (err) {
-      setError(err.response?.data?.message || 'Something went wrong')
+      const status = err.response?.status
+      if (status === 409) setError('An account with this email already exists')
+      else if (status === 401) setError('Incorrect email or password')
+      else setError('Something went wrong, please try again')
+      setPassword('')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div className="flex flex-col items-center py-8 sm:py-16">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">LinkLens</h1>
 
