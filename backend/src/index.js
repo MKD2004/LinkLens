@@ -68,4 +68,11 @@ app.use(errorHandler);
 await connectDB();
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+
+  if (process.env.NODE_ENV === 'production') {
+    const SELF_URL = process.env.BASE_URL + '/api/health';
+    setInterval(() => {
+      fetch(SELF_URL).catch(() => {});
+    }, 14 * 60 * 1000);
+  }
 });
