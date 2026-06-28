@@ -65,9 +65,9 @@ export default function LinkCard({ link, onToggle, onDelete }) {
         </div>
       </div>
 
-      <div className="flex items-center justify-between">
-        <span className="text-xs text-gray-400">{createdAt}</span>
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-xs text-gray-400 shrink-0">{createdAt}</span>
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-2">
           <button
             onClick={handleCopy}
             className="text-xs px-2.5 py-1 border border-gray-200 rounded-md hover:bg-gray-50 transition-colors"
