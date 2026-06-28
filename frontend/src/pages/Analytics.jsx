@@ -8,6 +8,7 @@ import { Line, Bar, Doughnut } from 'react-chartjs-2'
 import api from '../lib/axios'
 import { useAuth } from '../contexts/AuthContext'
 import useSSE from '../hooks/useSSE'
+import { StatSkeleton, ChartSkeleton } from '../components/LoadingSkeleton'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement,
   BarElement, ArcElement, Title, Tooltip, Legend)
@@ -75,7 +76,6 @@ export default function Analytics() {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  // Merge SSE clicks into byDay data
   const mergedByDay = useMemo(() => {
     if (!analyticsData) return []
     const base = fillDates(analyticsData.byDay)
@@ -85,7 +85,6 @@ export default function Analytics() {
     const map = Object.fromEntries(base.map(d => [d.date, d.count]))
     clicks.forEach(() => { map[today] = (map[today] || 0) + 1 })
 
-    // Ensure today is in the range
     if (!map[today]) map[today] = 0
     const allDates = [...new Set([...base.map(d => d.date), today])].sort()
     return allDates.map(date => ({ date, count: map[date] || 0 }))
@@ -93,9 +92,13 @@ export default function Analytics() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="space-y-3 w-full max-w-4xl px-4">
-          {[1,2,3].map(i => <div key={i} className="h-24 bg-white border border-gray-200 rounded-xl animate-pulse" />)}
+      <div className="max-w-5xl mx-auto space-y-6">
+        <div className="h-10 bg-white border border-gray-200 rounded-xl animate-pulse" />
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {[1, 2, 3, 4].map(i => <StatSkeleton key={i} />)}
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[1, 2, 3, 4].map(i => <ChartSkeleton key={i} />)}
         </div>
       </div>
     )
@@ -103,7 +106,7 @@ export default function Analytics() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex items-center justify-center py-24">
         <p className="text-red-500">{error}</p>
       </div>
     )
@@ -145,97 +148,95 @@ export default function Analytics() {
     }],
   }
 
-  const chartOpts = (title) => ({
+  const chartOpts = () => ({
     responsive: true,
     plugins: { legend: { display: false }, title: { display: false } },
     scales: { x: { grid: { display: false } }, y: { grid: { color: '#f3f4f6' } } },
   })
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-5xl mx-auto px-4 py-8">
+    <div className="max-w-5xl mx-auto">
 
-        {/* Header */}
-        <div className="flex items-center gap-4 mb-6">
-          <button onClick={() => navigate(-1)} className="text-sm text-gray-500 hover:text-gray-700">
-            ← Back
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6">
+        <button onClick={() => navigate(-1)} className="shrink-0 text-sm text-gray-500 hover:text-gray-700">
+          ← Back
+        </button>
+        <div className="flex-1 flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2 min-w-0">
+          <span className="text-indigo-600 text-sm font-medium break-all min-w-0 flex-1">{shortUrl}</span>
+          <button
+            onClick={handleCopy}
+            className="shrink-0 text-xs px-2 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
+          >
+            {copied ? 'Copied!' : 'Copy'}
           </button>
-          <div className="flex-1 flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2 min-w-0">
-            <span className="text-indigo-600 text-sm font-medium truncate">{shortUrl}</span>
-            <button
-              onClick={handleCopy}
-              className="shrink-0 text-xs px-2 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
-            >
-              {copied ? 'Copied!' : 'Copy'}
-            </button>
-          </div>
         </div>
+      </div>
 
-        {/* Summary cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-          <SummaryCard label="Total Clicks" value={liveTotal}>
-            {connected && (
-              <span className="flex items-center gap-1 text-xs text-green-500">
-                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse inline-block" />
-                Live
-              </span>
-            )}
-          </SummaryCard>
-          <SummaryCard label="Unique Visitors" value={uniqueVisitors} />
-          <SummaryCard label="Top Country" value={byCountry[0]?.country || 'N/A'} />
-          <SummaryCard label="Top Device" value={byDevice[0]?.device || 'N/A'} />
-        </div>
+      {/* Summary cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+        <SummaryCard label="Total Clicks" value={liveTotal}>
+          {connected && (
+            <span className="flex items-center gap-1 text-xs text-green-500">
+              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse inline-block" />
+              Live
+            </span>
+          )}
+        </SummaryCard>
+        <SummaryCard label="Unique Visitors" value={uniqueVisitors} />
+        <SummaryCard label="Top Country" value={byCountry[0]?.country || 'N/A'} />
+        <SummaryCard label="Top Device" value={byDevice[0]?.device || 'N/A'} />
+      </div>
 
-        {/* Charts grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <ChartCard title="Clicks over time (30 days)">
-            <Line data={lineData} options={chartOpts('Clicks over time')} height={120} />
-          </ChartCard>
+      {/* Charts grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <ChartCard title="Clicks over time (30 days)">
+          <Line data={lineData} options={chartOpts()} height={120} />
+        </ChartCard>
 
-          <ChartCard title="Top countries">
-            <Bar
-              data={barData}
-              options={{
-                ...chartOpts('Countries'),
-                indexAxis: 'y',
-                plugins: { legend: { display: false } },
-                scales: { x: { grid: { color: '#f3f4f6' } }, y: { grid: { display: false } } },
-              }}
-              height={120}
+        <ChartCard title="Top countries">
+          <Bar
+            data={barData}
+            options={{
+              ...chartOpts(),
+              indexAxis: 'y',
+              plugins: { legend: { display: false } },
+              scales: { x: { grid: { color: '#f3f4f6' } }, y: { grid: { display: false } } },
+            }}
+            height={120}
+          />
+        </ChartCard>
+
+        <ChartCard title="Device breakdown">
+          <div className="flex items-center justify-center">
+            <Doughnut
+              data={doughnutData}
+              options={{ responsive: true, plugins: { legend: { position: 'bottom' } }, cutout: '65%' }}
+              height={160}
             />
-          </ChartCard>
+          </div>
+        </ChartCard>
 
-          <ChartCard title="Device breakdown">
-            <div className="flex items-center justify-center">
-              <Doughnut
-                data={doughnutData}
-                options={{ responsive: true, plugins: { legend: { position: 'bottom' } }, cutout: '65%' }}
-                height={160}
-              />
-            </div>
-          </ChartCard>
-
-          <ChartCard title="Top referrers">
-            {byReferer.length === 0 ? (
-              <p className="text-gray-400 text-sm text-center py-8">No referrer data yet</p>
-            ) : (
-              <div className="space-y-2">
-                {byReferer.map((r, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <span className="text-sm text-gray-600 w-28 truncate shrink-0">{r.referer}</span>
-                    <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
-                      <div
-                        className="h-2 rounded-full bg-indigo-500"
-                        style={{ width: `${(r.count / maxReferer) * 100}%` }}
-                      />
-                    </div>
-                    <span className="text-xs text-gray-500 w-6 text-right shrink-0">{r.count}</span>
+        <ChartCard title="Top referrers">
+          {byReferer.length === 0 ? (
+            <p className="text-gray-400 text-sm text-center py-8">No referrer data yet</p>
+          ) : (
+            <div className="space-y-2">
+              {byReferer.map((r, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <span className="text-sm text-gray-600 w-28 truncate shrink-0">{r.referer}</span>
+                  <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
+                    <div
+                      className="h-2 rounded-full bg-indigo-500"
+                      style={{ width: `${(r.count / maxReferer) * 100}%` }}
+                    />
                   </div>
-                ))}
-              </div>
-            )}
-          </ChartCard>
-        </div>
+                  <span className="text-xs text-gray-500 w-6 text-right shrink-0">{r.count}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </ChartCard>
       </div>
     </div>
   )
