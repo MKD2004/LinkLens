@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
+import Analytics from './pages/Analytics'
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuth()
@@ -16,7 +17,7 @@ function AppRoutes() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />} />
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      <Route path="/analytics/:shortId" element={<ProtectedRoute><div className="min-h-screen flex items-center justify-center text-gray-500">Analytics coming Day 13</div></ProtectedRoute>} />
+      <Route path="/analytics/:shortId" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
     </Routes>
   )
 }
