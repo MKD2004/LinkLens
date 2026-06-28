@@ -106,14 +106,24 @@ export default function Analytics() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center py-24">
-        <p className="text-red-500">{error}</p>
+      <div className="max-w-5xl mx-auto">
+        <div className="bg-white border border-red-100 rounded-xl p-10 text-center">
+          <p className="text-lg font-semibold text-gray-800 mb-1">Failed to load analytics</p>
+          <p className="text-gray-400 text-sm mb-6">{error}</p>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="px-5 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
+          >
+            Back to Dashboard
+          </button>
+        </div>
       </div>
     )
   }
 
   const { totalClicks, uniqueVisitors, byCountry, byDevice, byReferer } = analyticsData
   const liveTotal = totalClicks + clicks.length
+  const isEmpty = totalClicks === 0 && clicks.length === 0
   const maxReferer = byReferer[0]?.count || 1
 
   const lineData = {
@@ -173,71 +183,95 @@ export default function Analytics() {
         </div>
       </div>
 
-      {/* Summary cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-        <SummaryCard label="Total Clicks" value={liveTotal}>
+      {isEmpty ? (
+        <div className="bg-white border border-gray-200 rounded-xl p-12 text-center">
           {connected && (
-            <span className="flex items-center gap-1 text-xs text-green-500">
+            <div className="flex items-center justify-center gap-1.5 text-xs text-green-500 mb-5">
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse inline-block" />
-              Live
-            </span>
-          )}
-        </SummaryCard>
-        <SummaryCard label="Unique Visitors" value={uniqueVisitors} />
-        <SummaryCard label="Top Country" value={byCountry[0]?.country || 'N/A'} />
-        <SummaryCard label="Top Device" value={byDevice[0]?.device || 'N/A'} />
-      </div>
-
-      {/* Charts grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <ChartCard title="Clicks over time (30 days)">
-          <Line data={lineData} options={chartOpts()} height={120} />
-        </ChartCard>
-
-        <ChartCard title="Top countries">
-          <Bar
-            data={barData}
-            options={{
-              ...chartOpts(),
-              indexAxis: 'y',
-              plugins: { legend: { display: false } },
-              scales: { x: { grid: { color: '#f3f4f6' } }, y: { grid: { display: false } } },
-            }}
-            height={120}
-          />
-        </ChartCard>
-
-        <ChartCard title="Device breakdown">
-          <div className="flex items-center justify-center">
-            <Doughnut
-              data={doughnutData}
-              options={{ responsive: true, plugins: { legend: { position: 'bottom' } }, cutout: '65%' }}
-              height={160}
-            />
-          </div>
-        </ChartCard>
-
-        <ChartCard title="Top referrers">
-          {byReferer.length === 0 ? (
-            <p className="text-gray-400 text-sm text-center py-8">No referrer data yet</p>
-          ) : (
-            <div className="space-y-2">
-              {byReferer.map((r, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <span className="text-sm text-gray-600 w-28 truncate shrink-0">{r.referer}</span>
-                  <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
-                    <div
-                      className="h-2 rounded-full bg-indigo-500"
-                      style={{ width: `${(r.count / maxReferer) * 100}%` }}
-                    />
-                  </div>
-                  <span className="text-xs text-gray-500 w-6 text-right shrink-0">{r.count}</span>
-                </div>
-              ))}
+              Live — waiting for first click
             </div>
           )}
-        </ChartCard>
-      </div>
+          <p className="text-lg font-semibold text-gray-700 mb-2">No clicks yet</p>
+          <p className="text-gray-400 text-sm mb-7">Share your link to start tracking</p>
+          <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 max-w-sm mx-auto">
+            <span className="flex-1 text-indigo-600 font-medium text-sm break-all min-w-0">{shortUrl}</span>
+            <button
+              onClick={handleCopy}
+              className="shrink-0 px-3 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 transition-colors"
+            >
+              {copied ? 'Copied!' : 'Copy'}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* Summary cards */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+            <SummaryCard label="Total Clicks" value={liveTotal}>
+              {connected && (
+                <span className="flex items-center gap-1 text-xs text-green-500">
+                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse inline-block" />
+                  Live
+                </span>
+              )}
+            </SummaryCard>
+            <SummaryCard label="Unique Visitors" value={uniqueVisitors} />
+            <SummaryCard label="Top Country" value={byCountry[0]?.country || 'N/A'} />
+            <SummaryCard label="Top Device" value={byDevice[0]?.device || 'N/A'} />
+          </div>
+
+          {/* Charts grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <ChartCard title="Clicks over time (30 days)">
+              <Line data={lineData} options={chartOpts()} height={120} />
+            </ChartCard>
+
+            <ChartCard title="Top countries">
+              <Bar
+                data={barData}
+                options={{
+                  ...chartOpts(),
+                  indexAxis: 'y',
+                  plugins: { legend: { display: false } },
+                  scales: { x: { grid: { color: '#f3f4f6' } }, y: { grid: { display: false } } },
+                }}
+                height={120}
+              />
+            </ChartCard>
+
+            <ChartCard title="Device breakdown">
+              <div className="flex items-center justify-center">
+                <Doughnut
+                  data={doughnutData}
+                  options={{ responsive: true, plugins: { legend: { position: 'bottom' } }, cutout: '65%' }}
+                  height={160}
+                />
+              </div>
+            </ChartCard>
+
+            <ChartCard title="Top referrers">
+              {byReferer.length === 0 ? (
+                <p className="text-gray-400 text-sm text-center py-8">No referrer data yet</p>
+              ) : (
+                <div className="space-y-2">
+                  {byReferer.map((r, i) => (
+                    <div key={i} className="flex items-center gap-3">
+                      <span className="text-sm text-gray-600 w-28 truncate shrink-0">{r.referer}</span>
+                      <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
+                        <div
+                          className="h-2 rounded-full bg-indigo-500"
+                          style={{ width: `${(r.count / maxReferer) * 100}%` }}
+                        />
+                      </div>
+                      <span className="text-xs text-gray-500 w-6 text-right shrink-0">{r.count}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </ChartCard>
+          </div>
+        </>
+      )}
     </div>
   )
 }
