@@ -16,12 +16,16 @@ export default function Home() {
     e.preventDefault()
     setError('')
     setResult(null)
-    if (!url) { setError('Please enter a URL'); return }
+    let trimmedUrl = url.trim()
+    if (!trimmedUrl) { setError('Please enter a URL'); return }
+    if (!trimmedUrl.startsWith('http://') && !trimmedUrl.startsWith('https://')) {
+      trimmedUrl = 'https://' + trimmedUrl
+    }
     setLoading(true)
     try {
       const { data } = await api.post('/api/links', {
-        url,
-        ...(customAlias ? { customAlias } : {}),
+        url: trimmedUrl,
+        ...(customAlias ? { customAlias: customAlias.trim() } : {}),
       })
       setResult(data)
     } catch (err) {
@@ -63,17 +67,22 @@ export default function Home() {
                 onChange={e => setUrl(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               />
-              <input
-                type="text"
-                placeholder="Custom alias (optional)"
-                value={customAlias}
-                onChange={e => setCustomAlias(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              />
+              <div>
+                <input
+                  type="text"
+                  placeholder="Custom alias (optional)"
+                  value={customAlias}
+                  onChange={e => setCustomAlias(e.target.value.slice(0, 30))}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                />
+                {customAlias && (
+                  <p className="text-xs text-gray-400 text-right mt-1">{customAlias.length}/30 characters</p>
+                )}
+              </div>
               {error && <p className="text-red-500 text-sm">{error}</p>}
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !url.trim()}
                 className="w-full py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {loading ? 'Shortening...' : 'Shorten'}
