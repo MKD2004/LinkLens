@@ -46,7 +46,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4">
+    <div className="flex flex-col items-center py-8 sm:py-16">
       <div className="w-full max-w-lg">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">LinkLens</h1>
@@ -83,7 +83,7 @@ export default function Home() {
             <div className="space-y-4">
               <p className="text-sm text-gray-500 font-medium">Your short link</p>
               <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-4 py-3">
-                <span className="flex-1 text-indigo-600 font-medium text-sm truncate">
+                <span className="flex-1 text-indigo-600 font-medium text-sm break-all min-w-0">
                   {result.shortUrl}
                 </span>
                 <button
@@ -93,7 +93,7 @@ export default function Home() {
                   {copied ? 'Copied!' : 'Copy'}
                 </button>
               </div>
-              <p className="text-xs text-gray-400 truncate">→ {result.originalUrl}</p>
+              <p className="text-xs text-gray-400 break-all">{result.originalUrl}</p>
               <button
                 onClick={handleReset}
                 className="w-full py-2.5 border border-gray-300 text-gray-600 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
