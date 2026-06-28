@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
+import ErrorBoundary from './components/ErrorBoundary'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -25,15 +26,17 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <ErrorBoundary>
       <AuthProvider>
-        <div className="min-h-screen bg-gray-50">
-          <Navbar />
-          <main className="max-w-6xl mx-auto px-4 py-8">
-            <AppRoutes />
-          </main>
-        </div>
+        <BrowserRouter>
+          <div className="min-h-screen bg-gray-50">
+            <Navbar />
+            <main className="max-w-6xl mx-auto px-4 py-8">
+              <AppRoutes />
+            </main>
+          </div>
+        </BrowserRouter>
       </AuthProvider>
-    </BrowserRouter>
+    </ErrorBoundary>
   )
 }
