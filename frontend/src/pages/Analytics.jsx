@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
   Chart as ChartJS, CategoryScale, LinearScale, PointElement,
-  LineElement, BarElement, ArcElement, Title, Tooltip, Legend,
+  LineElement, BarElement, ArcElement, Title, Tooltip, Legend, Filler,
 } from 'chart.js'
 import { Line, Bar, Doughnut } from 'react-chartjs-2'
 import api from '../lib/axios'
@@ -11,7 +11,7 @@ import useSSE from '../hooks/useSSE'
 import { StatSkeleton, ChartSkeleton } from '../components/LoadingSkeleton'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement,
-  BarElement, ArcElement, Title, Tooltip, Legend)
+  BarElement, ArcElement, Title, Tooltip, Legend, Filler)
 
 const BASE_URL = import.meta.env.VITE_API_URL
 const INDIGO = '#6366f1'
