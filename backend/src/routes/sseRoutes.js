@@ -1,14 +1,25 @@
 import { Router } from "express";
+import jwt from "jsonwebtoken";
 import Link from "../models/Link.js";
-import auth from "../middleware/auth.js";
 import { addClient, removeClient, getClientCount } from "../services/sse.js";
 
 const router = Router();
 
-router.get("/stream/:shortId", auth, async (req, res) => {
-  const { shortId } = req.params;
+router.get("/stream/:shortId", async (req, res) => {
+  const rawToken = req.headers.authorization?.split(" ")[1] || req.query.token;
+  if (!rawToken) {
+    return res.status(401).json({ error: "unauthorized", message: "Token required" });
+  }
 
-  const link = await Link.findOne({ shortId, userId: req.user.userId });
+  let decoded;
+  try {
+    decoded = jwt.verify(rawToken, process.env.JWT_SECRET);
+  } catch {
+    return res.status(401).json({ error: "unauthorized", message: "Invalid or expired token" });
+  }
+
+  const { shortId } = req.params;
+  const link = await Link.findOne({ shortId, userId: decoded.userId });
   if (!link) {
     return res.status(404).json({ error: "not_found", message: "Link not found" });
   }
