@@ -13,7 +13,9 @@ api.interceptors.request.use(config => {
 api.interceptors.response.use(
   res => res,
   err => {
-    if (err.response?.status === 401) {
+    // Only auto-logout on 401 if the user has an active session.
+    // A 401 on the login/register endpoints means bad credentials — let the form handle it.
+    if (err.response?.status === 401 && localStorage.getItem('token')) {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
       window.location.href = '/login'
