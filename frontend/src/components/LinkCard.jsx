@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../lib/axios'
+import QRModal from './QRModal'
 
 const BASE_URL = import.meta.env.VITE_API_URL
 
@@ -9,6 +10,7 @@ export default function LinkCard({ link, onToggle, onDelete }) {
   const [toggling, setToggling] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const [showQR, setShowQR] = useState(false)
   const navigate = useNavigate()
 
   const shortUrl = `${BASE_URL}/r/${link.shortId}`
@@ -108,6 +110,10 @@ export default function LinkCard({ link, onToggle, onDelete }) {
             {copied ? '✓ Copied' : 'Copy'}
           </button>
 
+          <button onClick={() => setShowQR(true)} className="btn-ghost px-2.5 py-1 text-xs rounded-lg">
+            QR
+          </button>
+
           <button
             onClick={handleToggle}
             disabled={toggling}
@@ -137,6 +143,10 @@ export default function LinkCard({ link, onToggle, onDelete }) {
           </button>
         </div>
       </div>
+
+      {showQR && (
+        <QRModal shortUrl={shortUrl} shortId={link.shortId} onClose={() => setShowQR(false)} />
+      )}
     </div>
   )
 }

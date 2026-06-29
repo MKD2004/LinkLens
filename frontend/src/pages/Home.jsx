@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../lib/axios'
 import { useAuth } from '../contexts/AuthContext'
+import QRModal from '../components/QRModal'
 
 export default function Home() {
   const [url, setUrl] = useState('')
@@ -10,6 +11,7 @@ export default function Home() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [showQR, setShowQR] = useState(false)
   const { isAuthenticated } = useAuth()
 
   async function handleSubmit(e) {
@@ -47,6 +49,7 @@ export default function Home() {
     setCustomAlias('')
     setResult(null)
     setError('')
+    setShowQR(false)
   }
 
   return (
@@ -151,6 +154,12 @@ export default function Home() {
                   >
                     {copied ? '✓ Copied' : 'Copy'}
                   </button>
+                  <button
+                    onClick={() => setShowQR(true)}
+                    className="btn-ghost shrink-0 px-3 py-1.5 text-xs rounded-lg"
+                  >
+                    QR
+                  </button>
                 </div>
               </div>
 
@@ -178,6 +187,14 @@ export default function Home() {
           </p>
         )}
       </div>
+
+      {showQR && result && (
+        <QRModal
+          shortUrl={result.shortUrl}
+          shortId={result.shortId}
+          onClose={() => setShowQR(false)}
+        />
+      )}
     </div>
   )
 }
