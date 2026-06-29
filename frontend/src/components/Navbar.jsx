@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 
 export default function Navbar() {
-  const { isAuthenticated, logout } = useAuth()
+  const { isAuthenticated, logout, user } = useAuth()
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const navigate = useNavigate()
@@ -52,7 +52,14 @@ export default function Navbar() {
               >
                 Dashboard
               </Link>
-              <span className="text-sm text-[#C4C0B8] cursor-default select-none">Analytics</span>
+              {user?.name && (
+                <span
+                  className="text-sm px-3 py-1 rounded-full"
+                  style={{ background: 'rgba(26,26,20,.06)', color: '#1A1A14', fontFamily: "'Instrument Sans', sans-serif" }}
+                >
+                  {user.name}
+                </span>
+              )}
               <button onClick={handleLogout} className="btn-ghost px-3.5 py-1.5 text-sm">
                 Logout
               </button>
@@ -91,6 +98,14 @@ export default function Navbar() {
         >
           {isAuthenticated ? (
             <>
+              {user?.name && (
+                <div className="px-2 py-1.5 mb-1">
+                  <span className="text-xs text-[#A8A89C]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                    Signed in as
+                  </span>
+                  <p className="text-sm font-medium text-[#1A1A14] mt-0.5">{user.name}</p>
+                </div>
+              )}
               <Link
                 to="/dashboard"
                 onClick={() => setOpen(false)}
@@ -98,9 +113,6 @@ export default function Navbar() {
               >
                 Dashboard
               </Link>
-              <span className="flex items-center gap-2 text-sm text-[#C4C0B8] py-2 px-2 select-none">
-                Analytics
-              </span>
               <button
                 onClick={() => { setOpen(false); handleLogout() }}
                 className="flex w-full items-center gap-2 text-sm text-[#DC2626] hover:text-[#B91C1C] transition-colors py-2 px-2 rounded-lg hover:bg-[rgba(220,38,38,.05)]"
