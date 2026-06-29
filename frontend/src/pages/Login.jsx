@@ -41,57 +41,113 @@ export default function Login() {
   }
 
   return (
-    <div className="flex flex-col items-center py-8 sm:py-16">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">LinkLens</h1>
+    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-7rem)] py-10 relative">
 
-        <div className="flex rounded-lg border border-gray-200 p-1 mb-6">
-          {['login', 'register'].map(t => (
-            <button
-              key={t}
-              onClick={() => { setTab(t); setError('') }}
-              className={`flex-1 py-2 text-sm font-medium rounded-md transition-colors ${
-                tab === t ? 'bg-indigo-600 text-white' : 'text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              {t === 'login' ? 'Login' : 'Register'}
-            </button>
-          ))}
+      {/* Spotlight */}
+      <div
+        className="pointer-events-none fixed inset-0 -z-10"
+        style={{ background: 'radial-gradient(ellipse 70% 40% at 50% 0%, rgba(124,111,247,0.09) 0%, transparent 60%)' }}
+      />
+
+      <div className="w-full max-w-md animate-fade-up">
+
+        {/* Brand */}
+        <div className="text-center mb-8">
+          <span
+            className="text-3xl select-none"
+            style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, letterSpacing: '-.03em' }}
+          >
+            <span className="text-[#E8E6FF]">Link</span>
+            <span className="text-[#7C6FF7]">Lens</span>
+          </span>
+          <p className="text-[#4A4A62] text-sm mt-1.5">
+            {tab === 'login' ? 'Welcome back.' : 'Create your account.'}
+          </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {tab === 'register' && (
-            <input
-              type="text"
-              placeholder="Name"
-              value={name}
-              onChange={e => setName(e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-            />
-          )}
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-          />
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        {/* Card */}
+        <div
+          className="rounded-2xl p-7"
+          style={{ background: '#0F0F15', border: '1px solid #252533' }}
+        >
+          {/* Tab switcher */}
+          <div
+            className="flex rounded-xl p-1 mb-6 gap-1"
+            style={{ background: '#1A1A25' }}
           >
-            {loading ? 'Please wait...' : tab === 'login' ? 'Login' : 'Create account'}
-          </button>
-        </form>
+            {['login', 'register'].map(t => (
+              <button
+                key={t}
+                onClick={() => { setTab(t); setError('') }}
+                className="flex-1 py-2 text-sm font-medium rounded-lg transition-all duration-200"
+                style={
+                  tab === t
+                    ? { background: '#7C6FF7', color: '#fff', boxShadow: '0 2px 8px rgba(124,111,247,.4)' }
+                    : { background: 'transparent', color: '#6B6A85' }
+                }
+              >
+                {t === 'login' ? 'Login' : 'Register'}
+              </button>
+            ))}
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-3">
+            {tab === 'register' && (
+              <input
+                className="input-dark"
+                type="text"
+                placeholder="Your name"
+                value={name}
+                onChange={e => setName(e.target.value)}
+                autoComplete="name"
+              />
+            )}
+            <input
+              className="input-dark"
+              type="email"
+              placeholder="Email address"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              autoComplete="email"
+            />
+            <input
+              className="input-dark"
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              autoComplete={tab === 'login' ? 'current-password' : 'new-password'}
+            />
+
+            {error && (
+              <div
+                className="flex items-start gap-2.5 rounded-lg px-3.5 py-2.5"
+                style={{ background: 'rgba(248,113,113,.08)', border: '1px solid rgba(248,113,113,.18)' }}
+              >
+                <svg className="w-4 h-4 text-[#F87171] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                </svg>
+                <p className="text-[#F87171] text-sm">{error}</p>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary w-full py-3 text-sm mt-1"
+            >
+              {loading ? (
+                <>
+                  <svg className="w-4 h-4 animate-spin-slow" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Please wait...
+                </>
+              ) : tab === 'login' ? 'Login →' : 'Create account →'}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   )
