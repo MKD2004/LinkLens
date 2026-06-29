@@ -38,13 +38,27 @@ export default function Dashboard() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">My Links</h1>
+
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-7 animate-fade-up">
+        <div>
+          <h1
+            className="text-2xl text-[#E8E6FF]"
+            style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, letterSpacing: '-.02em' }}
+          >
+            My Links
+          </h1>
+          {!loading && !error && (
+            <p className="text-[#4A4A62] text-sm mt-0.5">
+              {links.length === 0 ? 'No links yet' : `Page ${page} of ${totalPages}`}
+            </p>
+          )}
+        </div>
         <button
           onClick={() => navigate('/')}
-          className="w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
+          className="btn-primary w-full sm:w-auto px-4 py-2 text-sm"
         >
-          Shorten New Link
+          + New link
         </button>
       </div>
 
@@ -55,54 +69,75 @@ export default function Dashboard() {
           <CardSkeleton />
         </div>
       ) : error ? (
-        <div className="text-center py-16">
-          <p className="text-red-500 mb-4">{error}</p>
-          <button
-            onClick={fetchLinks}
-            className="px-4 py-2 border border-gray-300 text-sm rounded-lg hover:bg-gray-50"
-          >
+        <div
+          className="rounded-xl p-10 text-center animate-fade-up"
+          style={{ background: '#0F0F15', border: '1px solid rgba(248,113,113,.15)' }}
+        >
+          <p className="text-[#F87171] text-sm mb-4">{error}</p>
+          <button onClick={fetchLinks} className="btn-ghost px-4 py-2 text-sm">
             Retry
           </button>
         </div>
       ) : links.length === 0 ? (
-        <div className="text-center py-16">
-          <p className="text-gray-400 mb-4">No links yet. Shorten your first URL.</p>
-          <button
-            onClick={() => navigate('/')}
-            className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
+        <div
+          className="rounded-2xl p-14 text-center animate-fade-up"
+          style={{ background: '#0F0F15', border: '1px solid #252533' }}
+        >
+          <div
+            className="w-14 h-14 mx-auto mb-5 rounded-2xl flex items-center justify-center"
+            style={{ background: 'rgba(124,111,247,.08)', border: '1px solid rgba(124,111,247,.15)' }}
           >
-            Get started
+            <svg className="w-6 h-6 text-[#7C6FF7]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+          </div>
+          <p
+            className="text-[#E8E6FF] mb-1 text-base"
+            style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600 }}
+          >
+            No links yet
+          </p>
+          <p className="text-[#4A4A62] text-sm mb-6">Shorten your first URL to get started.</p>
+          <button onClick={() => navigate('/')} className="btn-primary px-5 py-2.5 text-sm">
+            Create first link →
           </button>
         </div>
       ) : (
         <>
           <div className="space-y-3">
-            {links.map(link => (
-              <LinkCard
+            {links.map((link, i) => (
+              <div
                 key={link.shortId}
-                link={link}
-                onToggle={handleToggle}
-                onDelete={handleDelete}
-              />
+                className="animate-fade-up"
+                style={{ animationDelay: `${i * 0.05}s`, opacity: 0 }}
+              >
+                <LinkCard
+                  link={link}
+                  onToggle={handleToggle}
+                  onDelete={handleDelete}
+                />
+              </div>
             ))}
           </div>
 
           {totalPages > 1 && (
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8 animate-fade-up">
               <button
                 onClick={() => setPage(p => p - 1)}
                 disabled={page === 1}
-                className="w-full sm:w-auto px-3 py-1.5 text-sm border border-gray-300 rounded-lg disabled:opacity-40 hover:bg-gray-50 transition-colors"
+                className="btn-ghost w-full sm:w-auto px-4 py-2 text-sm"
               >
-                Previous
+                ← Previous
               </button>
-              <span className="text-sm text-gray-500">Page {page} of {totalPages}</span>
+              <span className="text-sm text-[#3A3A52] font-mono">
+                {page} / {totalPages}
+              </span>
               <button
                 onClick={() => setPage(p => p + 1)}
                 disabled={page === totalPages}
-                className="w-full sm:w-auto px-3 py-1.5 text-sm border border-gray-300 rounded-lg disabled:opacity-40 hover:bg-gray-50 transition-colors"
+                className="btn-ghost w-full sm:w-auto px-4 py-2 text-sm"
               >
-                Next
+                Next →
               </button>
             </div>
           )}
