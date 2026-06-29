@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -233,3 +234,122 @@
     transition-duration: .01ms !important;
   }
 }
+
+/* ══════════════════════════════════════════════════
+   LANDING PAGE — Optimus-style design system
+   ══════════════════════════════════════════════════ */
+
+/* ── Landing root ───────────────────────────────── */
+.ll-landing {
+  background-color: #F9F8F5;
+  color: #1A1A14;
+  font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+.ll-landing ::selection {
+  background: rgba(26,26,20,0.15);
+  color: #1A1A14;
+}
+
+/* ── Font helpers ───────────────────────────────── */
+.ll-display {
+  font-family: 'Instrument Serif', ui-serif, Georgia, serif;
+  font-weight: 400;
+}
+
+.ll-mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* ── Noise texture overlay ──────────────────────── */
+.ll-noise::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* ── Char-by-char blur-in animation ────────────── */
+@keyframes ll-char-blur-in {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+.ll-char-in {
+  animation: ll-char-blur-in 0.4s ease forwards;
+  opacity: 0;
+}
+
+/* ── Marquee (stats ticker) ─────────────────────── */
+@keyframes ll-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.ll-marquee {
+  animation: ll-marquee 30s linear infinite;
+  width: max-content;
+}
+
+.ll-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* ── Step progress bar ──────────────────────────── */
+@keyframes ll-progress {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+.ll-step-progress {
+  height: 2px;
+  background: rgba(249,248,245,0.2);
+  overflow: hidden;
+}
+
+.ll-step-progress-bar {
+  height: 100%;
+  background: #F9F8F5;
+  animation: ll-progress 5s linear forwards;
+}
+
+/* ── Code line slide-in ─────────────────────────── */
+@keyframes ll-code-line-in {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.ll-code-line {
+  animation: ll-code-line-in 0.3s ease forwards;
+  opacity: 0;
+}
+
+@keyframes ll-code-char-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.ll-code-char {
+  animation: ll-code-char-in 0.05s ease forwards;
+  opacity: 0;
+}
+
+/* ── Landing-page scrollbar ─────────────────────── */
+.ll-landing::-webkit-scrollbar { width: 4px; }
+.ll-landing::-webkit-scrollbar-track { background: #F9F8F5; }
+.ll-landing::-webkit-scrollbar-thumb { background: rgba(26,26,20,0.2); border-radius: 99px; }
+.ll-landing::-webkit-scrollbar-thumb:hover { background: rgba(26,26,20,0.4); }
