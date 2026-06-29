@@ -50,63 +50,119 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col items-center py-8 sm:py-16">
-      <div className="w-full max-w-lg">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">LinkLens</h1>
-          <p className="text-gray-500">Shorten URLs and track clicks in real time</p>
+    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-7rem)] py-10 relative">
+
+      {/* Violet spotlight */}
+      <div
+        className="pointer-events-none fixed inset-0 -z-10"
+        style={{ background: 'radial-gradient(ellipse 75% 45% at 50% 0%, rgba(124,111,247,0.11) 0%, transparent 65%)' }}
+      />
+
+      <div className="w-full max-w-[480px]">
+
+        {/* Headline */}
+        <div className="text-center mb-9 animate-fade-up">
+          <h1
+            className="text-[2.6rem] sm:text-5xl leading-[1.1] text-[#E8E6FF] mb-3"
+            style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, letterSpacing: '-.03em' }}
+          >
+            Your links,<br />
+            under a lens<span className="text-[#7C6FF7]">.</span>
+          </h1>
+          <p className="text-[#4A4A62] text-base">
+            Shorten, share, and watch clicks roll in—live.
+          </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+        {/* Card */}
+        <div
+          className="rounded-2xl p-6 animate-fade-up-1"
+          style={{ background: '#0F0F15', border: '1px solid #252533' }}
+        >
           {!result ? (
             <form onSubmit={handleSubmit} className="space-y-3">
               <input
+                className="input-dark"
                 type="text"
-                placeholder="https://example.com"
+                placeholder="Paste a long URL..."
                 value={url}
                 onChange={e => setUrl(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                autoFocus
               />
               <div>
                 <input
+                  className="input-dark"
                   type="text"
                   placeholder="Custom alias (optional)"
                   value={customAlias}
                   onChange={e => setCustomAlias(e.target.value.slice(0, 30))}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 />
                 {customAlias && (
-                  <p className="text-xs text-gray-400 text-right mt-1">{customAlias.length}/30 characters</p>
+                  <p className="text-xs text-[#3A3A52] text-right mt-1.5 font-mono">
+                    {customAlias.length}/30
+                  </p>
                 )}
               </div>
-              {error && <p className="text-red-500 text-sm">{error}</p>}
+
+              {error && (
+                <div
+                  className="flex items-start gap-2.5 rounded-lg px-3.5 py-2.5"
+                  style={{ background: 'rgba(248,113,113,.08)', border: '1px solid rgba(248,113,113,.18)' }}
+                >
+                  <svg className="w-4 h-4 text-[#F87171] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                  </svg>
+                  <p className="text-[#F87171] text-sm">{error}</p>
+                </div>
+              )}
+
               <button
                 type="submit"
                 disabled={loading || !url.trim()}
-                className="w-full py-3 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="btn-primary w-full py-3 text-sm"
               >
-                {loading ? 'Shortening...' : 'Shorten'}
+                {loading ? (
+                  <>
+                    <svg className="w-4 h-4 animate-spin-slow" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Shortening...
+                  </>
+                ) : 'Shorten →'}
               </button>
             </form>
           ) : (
-            <div className="space-y-4">
-              <p className="text-sm text-gray-500 font-medium">Your short link</p>
-              <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-4 py-3">
-                <span className="flex-1 text-indigo-600 font-medium text-sm break-all min-w-0">
-                  {result.shortUrl}
-                </span>
-                <button
-                  onClick={handleCopy}
-                  className="shrink-0 px-3 py-1.5 bg-indigo-600 text-white text-xs font-medium rounded-md hover:bg-indigo-700 transition-colors"
+            <div className="space-y-4 animate-slide-in">
+              <div>
+                <p className="text-[#3A3A52] text-xs uppercase tracking-widest font-medium mb-2.5">
+                  Your short link
+                </p>
+                <div
+                  className="flex items-center gap-3 rounded-xl px-4 py-3"
+                  style={{ background: 'rgba(124,111,247,.08)', border: '1px solid rgba(124,111,247,.22)' }}
                 >
-                  {copied ? 'Copied!' : 'Copy'}
-                </button>
+                  <span className="url-glow animate-glow-pulse flex-1 text-sm break-all min-w-0">
+                    {result.shortUrl}
+                  </span>
+                  <button
+                    onClick={handleCopy}
+                    className="btn-primary shrink-0 px-3 py-1.5 text-xs rounded-lg"
+                  >
+                    {copied ? '✓ Copied' : 'Copy'}
+                  </button>
+                </div>
               </div>
-              <p className="text-xs text-gray-400 break-all">{result.originalUrl}</p>
-              <button
-                onClick={handleReset}
-                className="w-full py-2.5 border border-gray-300 text-gray-600 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+
+              <p
+                className="text-xs text-[#3A3A52] break-all truncate"
+                style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                title={result.originalUrl}
               >
+                {result.originalUrl}
+              </p>
+
+              <button onClick={handleReset} className="btn-ghost w-full py-2.5 text-sm">
                 Shorten another
               </button>
             </div>
@@ -114,10 +170,11 @@ export default function Home() {
         </div>
 
         {!isAuthenticated && (
-          <p className="text-center mt-4 text-sm text-gray-500">
-            <Link to="/login" className="text-indigo-600 hover:underline">
-              Sign in to track your links
+          <p className="text-center mt-5 text-sm text-[#3A3A52] animate-fade-up-2">
+            <Link to="/login" className="text-[#7C6FF7] hover:text-[#A89EF8] transition-colors">
+              Sign in
             </Link>
+            {' '}to track your links in real time
           </p>
         )}
       </div>
