@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { QRCodeSVG, QRCodeCanvas } from 'qrcode.react'
 
 export default function QRModal({ shortUrl, shortId, onClose }) {
@@ -20,7 +21,7 @@ export default function QRModal({ shortUrl, shortId, onClose }) {
     a.click()
   }
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center px-4"
       style={{ background: 'rgba(0,0,0,0.7)' }}
@@ -89,6 +90,7 @@ export default function QRModal({ shortUrl, shortId, onClose }) {
           Download PNG
         </button>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
