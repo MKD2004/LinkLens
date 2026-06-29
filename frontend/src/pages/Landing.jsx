@@ -32,7 +32,6 @@ const navLinks = [
   { name: 'Features',     href: '#features' },
   { name: 'How it works', href: '#how-it-works' },
   { name: 'Analytics',    href: '#analytics-preview' },
-  { name: 'Pricing',      href: '#pricing' },
 ]
 
 function Nav() {
@@ -848,147 +847,6 @@ function MetricsSection() {
   )
 }
 
-// ── Pricing ───────────────────────────────────────────────────────────────────
-
-const plans = [
-  {
-    name: 'Free',
-    description: 'For personal projects and experiments',
-    price: { monthly: 0, annual: 0 },
-    features: ['50 links per month', 'Basic click tracking', '30-day analytics history', 'QR code generation', 'Custom aliases'],
-    cta: 'Start free',
-    popular: false,
-    href: '/login',
-  },
-  {
-    name: 'Pro',
-    description: 'For power users and small teams',
-    price: { monthly: 9, annual: 7 },
-    features: ['Unlimited links', 'Real-time live analytics', '1-year analytics history', 'Custom aliases', 'QR code export (PNG)', 'API access', 'Priority support'],
-    cta: 'Start trial',
-    popular: true,
-    href: '/login',
-  },
-  {
-    name: 'Team',
-    description: 'For teams that move fast',
-    price: { monthly: null, annual: null },
-    features: ['Everything in Pro', 'Team member management', 'Custom domain (lns.yourdomain.com)', 'Unlimited history', '24/7 dedicated support', 'SLA guarantee', 'SSO & audit logs'],
-    cta: 'Contact us',
-    popular: false,
-    href: '#',
-  },
-]
-
-function PricingSection() {
-  const [annual, setAnnual] = useState(true)
-
-  return (
-    <section id="pricing" className="relative py-32 lg:py-40 border-t" style={{ borderColor: BORDER }}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="max-w-3xl mb-20">
-          <span className="ll-mono text-xs tracking-widest uppercase block mb-6" style={{ color: MUTED }}>
-            Pricing
-          </span>
-          <h2 className="ll-display tracking-tight mb-6" style={{ fontSize: 'clamp(2.5rem,5vw,4.5rem)', color: FG }}>
-            Simple, transparent
-            <br />
-            <span style={{ WebkitTextStroke: `1.5px ${FG}`, WebkitTextFillColor: 'transparent' }}>pricing</span>
-          </h2>
-          <p className="text-lg" style={{ color: MUTED }}>
-            Start free and scale as you grow. No hidden fees, no surprises.
-          </p>
-        </div>
-
-        {/* Toggle */}
-        <div className="flex items-center gap-4 mb-16">
-          <span className="text-sm" style={{ color: !annual ? FG : MUTED }}>Monthly</span>
-          <button
-            onClick={() => setAnnual(!annual)}
-            className="relative w-14 h-7 rounded-full p-1"
-            style={{ background: `${FG}1A` }}
-          >
-            <div
-              className="w-5 h-5 rounded-full transition-transform duration-300"
-              style={{ background: FG, transform: annual ? 'translateX(28px)' : 'translateX(0)' }}
-            />
-          </button>
-          <span className="text-sm" style={{ color: annual ? FG : MUTED }}>Annual</span>
-          {annual && (
-            <span className="ml-2 px-2 py-1 text-xs ll-mono" style={{ background: FG, color: BG }}>Save 22%</span>
-          )}
-        </div>
-
-        {/* Cards */}
-        <div className="grid md:grid-cols-3 gap-px" style={{ background: BORDER }}>
-          {plans.map((plan, idx) => (
-            <div
-              key={plan.name}
-              className="relative p-8 lg:p-12"
-              style={{
-                background: BG,
-                ...(plan.popular ? { marginTop: '-1rem', marginBottom: '-1rem', paddingTop: '4rem', paddingBottom: '4rem', border: `2px solid ${FG}` } : {}),
-              }}
-            >
-              {plan.popular && (
-                <span
-                  className="absolute -top-3 left-8 px-3 py-1 text-xs ll-mono uppercase tracking-widest"
-                  style={{ background: FG, color: BG }}
-                >
-                  Most Popular
-                </span>
-              )}
-              <div className="mb-8">
-                <span className="ll-mono text-xs" style={{ color: MUTED }}>{String(idx + 1).padStart(2, '0')}</span>
-                <h3 className="ll-display text-3xl mt-2" style={{ color: FG }}>{plan.name}</h3>
-                <p className="text-sm mt-2" style={{ color: MUTED }}>{plan.description}</p>
-              </div>
-              <div className="mb-8 pb-8 border-b" style={{ borderColor: BORDER }}>
-                {plan.price.monthly !== null ? (
-                  <div className="flex items-baseline gap-2">
-                    <span className="ll-display" style={{ fontSize: 'clamp(2.5rem,5vw,3.5rem)', color: FG }}>
-                      ${annual ? plan.price.annual : plan.price.monthly}
-                    </span>
-                    <span style={{ color: MUTED }}>/month</span>
-                  </div>
-                ) : (
-                  <span className="ll-display text-4xl" style={{ color: FG }}>Custom</span>
-                )}
-              </div>
-              <ul className="space-y-4 mb-10">
-                {plan.features.map((f) => (
-                  <li key={f} className="flex items-start gap-3">
-                    <svg className="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: FG }}>
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-sm" style={{ color: MUTED }}>{f}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link
-                to={plan.href}
-                className="w-full py-4 flex items-center justify-center gap-2 text-sm font-medium transition-all group"
-                style={plan.popular
-                  ? { background: FG, color: BG }
-                  : { border: `1px solid ${BORDER}`, color: FG }
-                }
-              >
-                {plan.cta}
-                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-            </div>
-          ))}
-        </div>
-
-        <p className="mt-12 text-center text-sm" style={{ color: MUTED }}>
-          All plans include HTTPS, QR codes, and click tracking. No credit card required to start.
-        </p>
-      </div>
-    </section>
-  )
-}
 
 // ── CTA ───────────────────────────────────────────────────────────────────────
 
@@ -1067,7 +925,6 @@ const footerLinks = {
   Product: [
     { name: 'Features',     href: '#features' },
     { name: 'How it works', href: '#how-it-works' },
-    { name: 'Pricing',      href: '#pricing' },
     { name: 'Analytics',    href: '#analytics-preview' },
   ],
   Developers: [
@@ -1174,7 +1031,6 @@ export default function Landing() {
       <FeaturesSection />
       <HowItWorksSection />
       <MetricsSection />
-      <PricingSection />
       <CTASection />
       <Footer />
     </div>
