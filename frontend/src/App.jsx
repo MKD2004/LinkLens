@@ -25,7 +25,7 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0D1117] hero-grid">
+    <div className="min-h-screen bg-[#F9F8F5] hero-grid">
       <Navbar />
       <main className="max-w-6xl mx-auto px-4 py-8">
         <Routes>

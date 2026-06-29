@@ -24,18 +24,18 @@ export default function QRModal({ shortUrl, shortId, onClose }) {
   return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center px-4"
-      style={{ background: 'rgba(0,0,0,0.7)' }}
+      style={{ background: 'rgba(26,26,20,0.5)', backdropFilter: 'blur(4px)' }}
       onClick={onClose}
     >
       <div
         className="relative rounded-2xl p-6 w-full max-w-sm animate-fade-up"
-        style={{ background: '#161D2E', border: '1px solid #243049' }}
+        style={{ background: '#FFFFFF', border: '1px solid #E0DDD6', boxShadow: '0 8px 40px rgba(26,26,20,.12)' }}
         onClick={e => e.stopPropagation()}
       >
         {/* Close */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-[#3A4E6A] hover:text-[#F0F6FF] transition-colors"
+          className="absolute top-4 right-4 text-[#A8A89C] hover:text-[#1A1A14] transition-colors"
           aria-label="Close"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,29 +45,29 @@ export default function QRModal({ shortUrl, shortId, onClose }) {
 
         {/* Heading */}
         <h2
-          className="text-lg text-[#F0F6FF] mb-1"
-          style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600 }}
+          className="text-lg text-[#1A1A14] mb-1"
+          style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400 }}
         >
           QR Code
         </h2>
         <p
-          className="text-xs text-[#3A4E6A] mb-5 truncate"
+          className="text-xs text-[#A8A89C] mb-5 truncate"
           style={{ fontFamily: "'JetBrains Mono', monospace" }}
         >
           {shortUrl}
         </p>
 
-        {/* Visible QR — SVG, transparent bg */}
+        {/* Visible QR — SVG, light bg */}
         <div className="flex justify-center mb-5">
           <div
             className="rounded-xl p-4"
-            style={{ background: '#1E2A40', border: '1px solid #243049' }}
+            style={{ background: '#F9F8F5', border: '1px solid #E0DDD6' }}
           >
             <QRCodeSVG
               value={shortUrl}
               size={200}
               bgColor="transparent"
-              fgColor="#ffffff"
+              fgColor="#1A1A14"
               level="H"
               includeMargin={false}
             />

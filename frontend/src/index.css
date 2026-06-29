@@ -2,20 +2,20 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg:           #0D1117;
-  --color-surface:      #161D2E;
-  --color-surface-2:    #1E2A40;
-  --color-border:       #243049;
+  --color-bg:           #F9F8F5;
+  --color-surface:      #FFFFFF;
+  --color-surface-2:    #F3F1EC;
+  --color-border:       #E0DDD6;
   --color-accent:       #FF6B2B;
   --color-accent-light: #FF9066;
-  --color-primary:      #F0F6FF;
-  --color-muted:        #5A6E8F;
-  --color-live:         #4ADE80;
-  --color-danger:       #F87171;
-  --color-cyan:         #00C8FF;
+  --color-primary:      #1A1A14;
+  --color-muted:        #6B6B5E;
+  --color-live:         #22C55E;
+  --color-danger:       #DC2626;
+  --color-cyan:         #0891B2;
 
-  --font-sans:    'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-sans:    'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Instrument Serif', ui-serif, Georgia, serif;
   --font-mono:    'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
 }
 
@@ -30,15 +30,15 @@
   html { scroll-behavior: smooth; }
 
   body {
-    background-color: #0D1117;
-    color: #F0F6FF;
-    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    background-color: #F9F8F5;
+    color: #1A1A14;
+    font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
     line-height: 1.6;
   }
 
   ::selection {
-    background: rgba(255, 107, 43, 0.28);
-    color: #F0F6FF;
+    background: rgba(255, 107, 43, 0.18);
+    color: #1A1A14;
   }
 
   :focus-visible {
@@ -48,8 +48,8 @@
   }
 
   ::-webkit-scrollbar { width: 5px; height: 5px; }
-  ::-webkit-scrollbar-track { background: #161D2E; }
-  ::-webkit-scrollbar-thumb { background: #243049; border-radius: 99px; }
+  ::-webkit-scrollbar-track { background: #F3F1EC; }
+  ::-webkit-scrollbar-thumb { background: #D4D1CA; border-radius: 99px; }
   ::-webkit-scrollbar-thumb:hover { background: #FF6B2B; }
 }
 
@@ -65,8 +65,8 @@
 }
 
 @keyframes glowPulse {
-  0%, 100% { text-shadow: 0 0 12px rgba(0,200,255,.5), 0 0 30px rgba(0,200,255,.2); }
-  50%       { text-shadow: 0 0 22px rgba(0,200,255,.9), 0 0 50px rgba(0,200,255,.45); }
+  0%, 100% { text-shadow: 0 0 12px rgba(8,145,178,.35), 0 0 30px rgba(8,145,178,.15); }
+  50%       { text-shadow: 0 0 22px rgba(8,145,178,.6), 0 0 50px rgba(8,145,178,.25); }
 }
 
 @keyframes shimmer {
@@ -95,28 +95,26 @@
 
 /* ── Skeleton shimmer ───────────────────────────── */
 .skeleton {
-  background: linear-gradient(90deg, #161D2E 25%, #1E2A40 50%, #161D2E 75%);
+  background: linear-gradient(90deg, #EDE9E2 25%, #E3DFD8 50%, #EDE9E2 75%);
   background-size: 200% 100%;
   animation: shimmer 1.6s ease-in-out infinite;
   border-radius: 6px;
 }
 
-/* ── Page-wide grid texture ─────────────────────── */
+/* ── Page-wide subtle dot texture ──────────────── */
 .hero-grid {
-  background-image:
-    linear-gradient(rgba(255,107,43,.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,107,43,.035) 1px, transparent 1px);
-  background-size: 44px 44px;
+  background-image: radial-gradient(circle, rgba(26,26,20,.05) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
-/* ── Card hover glow ────────────────────────────── */
+/* ── Card hover ─────────────────────────────────── */
 .card-hover {
   transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 .card-hover:hover {
-  border-color: rgba(255,107,43,.4) !important;
+  border-color: rgba(255,107,43,.3) !important;
   transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(255,107,43,.08), 0 0 0 1px rgba(255,107,43,.1);
+  box-shadow: 0 8px 32px rgba(255,107,43,.06), 0 0 0 1px rgba(255,107,43,.08);
 }
 
 /* ── Buttons ────────────────────────────────────── */
@@ -136,7 +134,7 @@
 }
 .btn-primary:hover:not(:disabled) {
   background: #E85A1A;
-  box-shadow: 0 0 28px rgba(255,107,43,.45), 0 4px 14px rgba(255,107,43,.2);
+  box-shadow: 0 0 24px rgba(255,107,43,.35), 0 4px 12px rgba(255,107,43,.15);
 }
 .btn-primary:active:not(:disabled) { transform: scale(.98); }
 .btn-primary:disabled { opacity: .4; cursor: not-allowed; }
@@ -147,18 +145,18 @@
   justify-content: center;
   gap: .5rem;
   background: transparent;
-  color: #5A6E8F;
+  color: #6B6B5E;
   font-size: .875rem;
   font-weight: 500;
-  border: 1px solid #243049;
+  border: 1px solid #D4D1CA;
   border-radius: 8px;
   cursor: pointer;
   transition: border-color .2s ease, color .2s ease, background .2s ease;
 }
 .btn-ghost:hover:not(:disabled) {
   border-color: rgba(255,107,43,.4);
-  color: #FF9066;
-  background: rgba(255,107,43,.06);
+  color: #FF6B2B;
+  background: rgba(255,107,43,.05);
 }
 .btn-ghost:disabled { opacity: .35; cursor: not-allowed; }
 
@@ -166,44 +164,43 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(248,113,113,.12);
-  color: #F87171;
+  background: rgba(220,38,38,.08);
+  color: #DC2626;
   font-size: .875rem;
   font-weight: 500;
-  border: 1px solid rgba(248,113,113,.25);
+  border: 1px solid rgba(220,38,38,.2);
   border-radius: 8px;
   cursor: pointer;
   transition: background .2s ease, border-color .2s ease;
 }
 .btn-danger:hover:not(:disabled) {
-  background: rgba(248,113,113,.22);
-  border-color: rgba(248,113,113,.5);
+  background: rgba(220,38,38,.14);
+  border-color: rgba(220,38,38,.4);
 }
 
 /* ── Input ──────────────────────────────────────── */
 .input-dark {
-  background: #1E2A40;
-  border: 1px solid #243049;
+  background: #FFFFFF;
+  border: 1px solid #D4D1CA;
   border-radius: 10px;
-  color: #F0F6FF;
-  font-family: 'Inter', sans-serif;
+  color: #1A1A14;
+  font-family: 'Instrument Sans', sans-serif;
   font-size: .875rem;
   padding: .75rem 1rem;
   width: 100%;
   transition: border-color .2s ease, box-shadow .2s ease;
   outline: none;
 }
-.input-dark::placeholder { color: #2A3A52; }
+.input-dark::placeholder { color: #B0ADA6; }
 .input-dark:focus {
   border-color: rgba(255,107,43,.55);
-  box-shadow: 0 0 0 3px rgba(255,107,43,.1);
+  box-shadow: 0 0 0 3px rgba(255,107,43,.08);
 }
 
-/* ── URL glow — the signature (cyan data, not violet) */
+/* ── URL — monospace link display ───────────────── */
 .url-glow {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
-  color: #00C8FF;
-  text-shadow: 0 0 16px rgba(0,200,255,.5);
+  color: #0369A1;
   letter-spacing: -.01em;
 }
 
@@ -214,7 +211,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #4ADE80;
+  background: #22C55E;
   flex-shrink: 0;
 }
 .live-dot::before {
@@ -222,7 +219,7 @@
   position: absolute;
   inset: -3px;
   border-radius: 50%;
-  background: #4ADE80;
+  background: #22C55E;
   animation: ripple 1.8s ease-out infinite;
 }
 

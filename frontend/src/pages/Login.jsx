@@ -43,10 +43,10 @@ export default function Login() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-7rem)] py-10 relative">
 
-      {/* Spotlight */}
+      {/* Warm spotlight */}
       <div
         className="pointer-events-none fixed inset-0 -z-10"
-        style={{ background: 'radial-gradient(ellipse 70% 40% at 50% 0%, rgba(255,107,43,0.08) 0%, transparent 60%)' }}
+        style={{ background: 'radial-gradient(ellipse 70% 40% at 50% 0%, rgba(255,107,43,0.05) 0%, transparent 60%)' }}
       />
 
       <div className="w-full max-w-md animate-fade-up">
@@ -55,12 +55,12 @@ export default function Login() {
         <div className="text-center mb-8">
           <span
             className="text-3xl select-none"
-            style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, letterSpacing: '-.03em' }}
+            style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400, letterSpacing: '-.02em' }}
           >
-            <span className="text-[#F0F6FF]">Link</span>
+            <span className="text-[#1A1A14]">Link</span>
             <span className="text-[#FF6B2B]">Lens</span>
           </span>
-          <p className="text-[#3A4E6A] text-sm mt-1.5">
+          <p className="text-[#6B6B5E] text-sm mt-1.5" style={{ fontFamily: "'Instrument Sans', sans-serif" }}>
             {tab === 'login' ? 'Welcome back.' : 'Create your account.'}
           </p>
         </div>
@@ -68,12 +68,12 @@ export default function Login() {
         {/* Card */}
         <div
           className="rounded-2xl p-7"
-          style={{ background: '#161D2E', border: '1px solid #243049' }}
+          style={{ background: '#FFFFFF', border: '1px solid #E0DDD6', boxShadow: '0 2px 16px rgba(26,26,20,.06)' }}
         >
           {/* Tab switcher */}
           <div
             className="flex rounded-xl p-1 mb-6 gap-1"
-            style={{ background: '#1E2A40' }}
+            style={{ background: '#F3F1EC' }}
           >
             {['login', 'register'].map(t => (
               <button
@@ -82,8 +82,8 @@ export default function Login() {
                 className="flex-1 py-2 text-sm font-medium rounded-lg transition-all duration-200"
                 style={
                   tab === t
-                    ? { background: '#FF6B2B', color: '#fff', boxShadow: '0 2px 8px rgba(255,107,43,.4)' }
-                    : { background: 'transparent', color: '#5A6E8F' }
+                    ? { background: '#FF6B2B', color: '#fff', boxShadow: '0 2px 8px rgba(255,107,43,.3)' }
+                    : { background: 'transparent', color: '#6B6B5E' }
                 }
               >
                 {t === 'login' ? 'Login' : 'Register'}
@@ -122,12 +122,12 @@ export default function Login() {
             {error && (
               <div
                 className="flex items-start gap-2.5 rounded-lg px-3.5 py-2.5"
-                style={{ background: 'rgba(248,113,113,.08)', border: '1px solid rgba(248,113,113,.18)' }}
+                style={{ background: 'rgba(220,38,38,.06)', border: '1px solid rgba(220,38,38,.15)' }}
               >
-                <svg className="w-4 h-4 text-[#F87171] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-[#DC2626] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
                 </svg>
-                <p className="text-[#F87171] text-sm">{error}</p>
+                <p className="text-[#DC2626] text-sm">{error}</p>
               </div>
             )}
 

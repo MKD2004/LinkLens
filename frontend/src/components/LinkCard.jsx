@@ -47,18 +47,16 @@ export default function LinkCard({ link, onToggle, onDelete }) {
   return (
     <div
       className="card-hover rounded-xl p-4 space-y-3"
-      style={{ background: '#161D2E', border: '1px solid #243049' }}
+      style={{ background: '#FFFFFF', border: '1px solid #E0DDD6', boxShadow: '0 1px 6px rgba(26,26,20,.04)' }}
     >
       {/* Top row */}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          {/* Short URL — cyan glow signature */}
           <p className="url-glow text-sm font-medium truncate">{shortUrl}</p>
 
-          {/* Original URL with tooltip + external link */}
           <div className="flex items-center gap-1.5 mt-1 min-w-0">
             <p
-              className="text-[#2A3A52] text-xs truncate"
+              className="text-[#A8A89C] text-xs truncate"
               style={{ fontFamily: "'JetBrains Mono', monospace" }}
               title={link.originalUrl}
             >
@@ -68,7 +66,7 @@ export default function LinkCard({ link, onToggle, onDelete }) {
               href={link.originalUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="shrink-0 text-[#1C2A3F] hover:text-[#FF6B2B] transition-colors"
+              className="shrink-0 text-[#C4C0B8] hover:text-[#FF6B2B] transition-colors"
               onClick={e => e.stopPropagation()}
             >
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,15 +81,15 @@ export default function LinkCard({ link, onToggle, onDelete }) {
         <div className="flex items-center gap-2 shrink-0">
           <span
             className="text-xs px-2 py-0.5 rounded-full font-mono"
-            style={{ background: 'rgba(0,200,255,.08)', color: '#00C8FF', border: '1px solid rgba(0,200,255,.15)' }}
+            style={{ background: 'rgba(3,105,161,.07)', color: '#0369A1', border: '1px solid rgba(3,105,161,.12)' }}
           >
             {link.clickCount}
           </span>
           <span
             className="text-xs px-2 py-0.5 rounded-full font-medium"
             style={link.isActive
-              ? { background: 'rgba(74,222,128,.08)', color: '#4ADE80', border: '1px solid rgba(74,222,128,.18)' }
-              : { background: 'rgba(248,113,113,.08)', color: '#F87171', border: '1px solid rgba(248,113,113,.18)' }
+              ? { background: 'rgba(34,197,94,.08)', color: '#16A34A', border: '1px solid rgba(34,197,94,.18)' }
+              : { background: 'rgba(220,38,38,.07)', color: '#DC2626', border: '1px solid rgba(220,38,38,.15)' }
             }
           >
             {link.isActive ? 'Active' : 'Inactive'}
@@ -101,7 +99,7 @@ export default function LinkCard({ link, onToggle, onDelete }) {
 
       {/* Bottom row */}
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs text-[#1C2A3F] shrink-0" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+        <span className="text-xs text-[#C4C0B8] shrink-0" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
           {createdAt}
         </span>
 
@@ -128,8 +126,8 @@ export default function LinkCard({ link, onToggle, onDelete }) {
             disabled={deleting}
             className="px-2.5 py-1 text-xs rounded-lg font-medium transition-all duration-150"
             style={confirmDelete
-              ? { background: '#F87171', color: '#fff', border: '1px solid #F87171' }
-              : { background: 'transparent', color: '#F87171', border: '1px solid rgba(248,113,113,.2)' }
+              ? { background: '#DC2626', color: '#fff', border: '1px solid #DC2626' }
+              : { background: 'transparent', color: '#DC2626', border: '1px solid rgba(220,38,38,.2)' }
             }
           >
             {deleting ? '…' : confirmDelete ? 'Sure?' : 'Delete'}

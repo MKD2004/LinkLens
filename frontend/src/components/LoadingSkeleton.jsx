@@ -2,7 +2,7 @@ export function CardSkeleton() {
   return (
     <div
       className="rounded-xl p-4 space-y-3"
-      style={{ background: '#161D2E', border: '1px solid #243049' }}
+      style={{ background: '#FFFFFF', border: '1px solid #E0DDD6' }}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 space-y-2">
@@ -31,7 +31,7 @@ export function ChartSkeleton() {
   return (
     <div
       className="rounded-xl p-5"
-      style={{ background: '#161D2E', border: '1px solid #243049' }}
+      style={{ background: '#FFFFFF', border: '1px solid #E0DDD6' }}
     >
       <div className="skeleton h-3.5 w-36 mb-5" />
       <div className="skeleton h-[220px] rounded-lg" />
@@ -43,7 +43,7 @@ export function StatSkeleton() {
   return (
     <div
       className="rounded-xl p-4"
-      style={{ background: '#161D2E', border: '1px solid #243049' }}
+      style={{ background: '#FFFFFF', border: '1px solid #E0DDD6' }}
     >
       <div className="skeleton h-3 w-20 mb-3" />
       <div className="skeleton h-7 w-16" />

@@ -55,10 +55,10 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-7rem)] py-10 relative">
 
-      {/* Orange spotlight */}
+      {/* Warm spotlight */}
       <div
         className="pointer-events-none fixed inset-0 -z-10"
-        style={{ background: 'radial-gradient(ellipse 70% 42% at 50% 0%, rgba(255,107,43,0.1) 0%, transparent 65%)' }}
+        style={{ background: 'radial-gradient(ellipse 70% 42% at 50% 0%, rgba(255,107,43,0.05) 0%, transparent 65%)' }}
       />
 
       <div className="w-full max-w-[480px]">
@@ -66,13 +66,13 @@ export default function Home() {
         {/* Headline */}
         <div className="text-center mb-9 animate-fade-up">
           <h1
-            className="text-[2.6rem] sm:text-5xl leading-[1.1] text-[#F0F6FF] mb-3"
-            style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, letterSpacing: '-.03em' }}
+            className="text-[2.6rem] sm:text-5xl leading-[1.1] text-[#1A1A14] mb-3"
+            style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400, letterSpacing: '-.02em' }}
           >
             Your links,<br />
             under a lens<span className="text-[#FF6B2B]">.</span>
           </h1>
-          <p className="text-[#3A4E6A] text-base">
+          <p className="text-[#6B6B5E] text-base">
             Shorten, share, and watch clicks roll in—live.
           </p>
         </div>
@@ -80,7 +80,7 @@ export default function Home() {
         {/* Card */}
         <div
           className="rounded-2xl p-6 animate-fade-up-1"
-          style={{ background: '#161D2E', border: '1px solid #243049' }}
+          style={{ background: '#FFFFFF', border: '1px solid #E0DDD6', boxShadow: '0 2px 16px rgba(26,26,20,.06)' }}
         >
           {!result ? (
             <form onSubmit={handleSubmit} className="space-y-3">
@@ -101,7 +101,7 @@ export default function Home() {
                   onChange={e => setCustomAlias(e.target.value.slice(0, 30))}
                 />
                 {customAlias && (
-                  <p className="text-xs text-[#2A3A52] text-right mt-1.5 font-mono">
+                  <p className="text-xs text-[#B0ADA6] text-right mt-1.5 font-mono">
                     {customAlias.length}/30
                   </p>
                 )}
@@ -110,12 +110,12 @@ export default function Home() {
               {error && (
                 <div
                   className="flex items-start gap-2.5 rounded-lg px-3.5 py-2.5"
-                  style={{ background: 'rgba(248,113,113,.08)', border: '1px solid rgba(248,113,113,.18)' }}
+                  style={{ background: 'rgba(220,38,38,.06)', border: '1px solid rgba(220,38,38,.15)' }}
                 >
-                  <svg className="w-4 h-4 text-[#F87171] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-[#DC2626] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
                   </svg>
-                  <p className="text-[#F87171] text-sm">{error}</p>
+                  <p className="text-[#DC2626] text-sm">{error}</p>
                 </div>
               )}
 
@@ -138,14 +138,14 @@ export default function Home() {
           ) : (
             <div className="space-y-4 animate-slide-in">
               <div>
-                <p className="text-[#2A3A52] text-xs uppercase tracking-widest font-medium mb-2.5">
+                <p className="text-[#A8A89C] text-xs uppercase tracking-widest font-medium mb-2.5">
                   Your short link
                 </p>
                 <div
                   className="flex items-center gap-3 rounded-xl px-4 py-3"
-                  style={{ background: 'rgba(0,200,255,.06)', border: '1px solid rgba(0,200,255,.18)' }}
+                  style={{ background: 'rgba(3,105,161,.04)', border: '1px solid rgba(3,105,161,.12)' }}
                 >
-                  <span className="url-glow animate-glow-pulse flex-1 text-sm break-all min-w-0">
+                  <span className="url-glow flex-1 text-sm break-all min-w-0">
                     {result.shortUrl}
                   </span>
                   <button
@@ -164,7 +164,7 @@ export default function Home() {
               </div>
 
               <p
-                className="text-xs text-[#2A3A52] break-all truncate"
+                className="text-xs text-[#B0ADA6] break-all truncate"
                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 title={result.originalUrl}
               >
@@ -179,8 +179,8 @@ export default function Home() {
         </div>
 
         {!isAuthenticated && (
-          <p className="text-center mt-5 text-sm text-[#2A3A52] animate-fade-up-2">
-            <Link to="/login" className="text-[#FF6B2B] hover:text-[#FF9066] transition-colors">
+          <p className="text-center mt-5 text-sm text-[#A8A89C] animate-fade-up-2">
+            <Link to="/login" className="text-[#FF6B2B] hover:text-[#E85A1A] transition-colors">
               Sign in
             </Link>
             {' '}to track your links in real time
