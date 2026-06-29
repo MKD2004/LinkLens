@@ -43,8 +43,8 @@ export default function createRateLimiter({ limit, windowSecs, keyPrefix }) {
 }
 
 export const shortenLimiter = createRateLimiter({
-  limit: 10,
-  windowSecs: 3600,
+  limit: 30,
+  windowSecs: 900,
   keyPrefix: "ratelimit:shorten",
 });
 
