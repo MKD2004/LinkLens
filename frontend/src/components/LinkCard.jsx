@@ -66,7 +66,7 @@ export default function LinkCard({ link, onToggle, onDelete }) {
               href={link.originalUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="shrink-0 text-[#C4C0B8] hover:text-[#FF6B2B] transition-colors"
+              className="shrink-0 text-[#C4C0B8] hover:text-[#1A1A14] transition-colors"
               onClick={e => e.stopPropagation()}
             >
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

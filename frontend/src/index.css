@@ -6,8 +6,8 @@
   --color-surface:      #FFFFFF;
   --color-surface-2:    #F3F1EC;
   --color-border:       #E0DDD6;
-  --color-accent:       #FF6B2B;
-  --color-accent-light: #FF9066;
+  --color-accent:       #1A1A14;
+  --color-accent-light: #3D3D33;
   --color-primary:      #1A1A14;
   --color-muted:        #6B6B5E;
   --color-live:         #22C55E;
@@ -37,12 +37,12 @@
   }
 
   ::selection {
-    background: rgba(255, 107, 43, 0.18);
+    background: rgba(26, 26, 20, 0.12);
     color: #1A1A14;
   }
 
   :focus-visible {
-    outline: 2px solid #FF6B2B;
+    outline: 2px solid #1A1A14;
     outline-offset: 2px;
     border-radius: 5px;
   }
@@ -50,7 +50,7 @@
   ::-webkit-scrollbar { width: 5px; height: 5px; }
   ::-webkit-scrollbar-track { background: #F3F1EC; }
   ::-webkit-scrollbar-thumb { background: #D4D1CA; border-radius: 99px; }
-  ::-webkit-scrollbar-thumb:hover { background: #FF6B2B; }
+  ::-webkit-scrollbar-thumb:hover { background: #1A1A14; }
 }
 
 /* ── Keyframes ──────────────────────────────────── */
@@ -112,9 +112,9 @@
   transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 .card-hover:hover {
-  border-color: rgba(255,107,43,.3) !important;
+  border-color: rgba(26,26,20,.2) !important;
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(255,107,43,.06), 0 0 0 1px rgba(255,107,43,.08);
+  box-shadow: 0 8px 32px rgba(26,26,20,.06), 0 0 0 1px rgba(26,26,20,.08);
 }
 
 /* ── Buttons ────────────────────────────────────── */
@@ -123,8 +123,8 @@
   align-items: center;
   justify-content: center;
   gap: .5rem;
-  background: #FF6B2B;
-  color: #fff;
+  background: #1A1A14;
+  color: #F9F8F5;
   font-weight: 600;
   font-size: .875rem;
   border-radius: 10px;
@@ -133,8 +133,8 @@
   transition: background .2s ease, box-shadow .2s ease, transform .15s ease;
 }
 .btn-primary:hover:not(:disabled) {
-  background: #E85A1A;
-  box-shadow: 0 0 24px rgba(255,107,43,.35), 0 4px 12px rgba(255,107,43,.15);
+  background: #2D2D24;
+  box-shadow: 0 4px 16px rgba(26,26,20,.2);
 }
 .btn-primary:active:not(:disabled) { transform: scale(.98); }
 .btn-primary:disabled { opacity: .4; cursor: not-allowed; }
@@ -154,9 +154,9 @@
   transition: border-color .2s ease, color .2s ease, background .2s ease;
 }
 .btn-ghost:hover:not(:disabled) {
-  border-color: rgba(255,107,43,.4);
-  color: #FF6B2B;
-  background: rgba(255,107,43,.05);
+  border-color: rgba(26,26,20,.4);
+  color: #1A1A14;
+  background: rgba(26,26,20,.05);
 }
 .btn-ghost:disabled { opacity: .35; cursor: not-allowed; }
 
@@ -193,8 +193,8 @@
 }
 .input-dark::placeholder { color: #B0ADA6; }
 .input-dark:focus {
-  border-color: rgba(255,107,43,.55);
-  box-shadow: 0 0 0 3px rgba(255,107,43,.08);
+  border-color: rgba(26,26,20,.55);
+  box-shadow: 0 0 0 3px rgba(26,26,20,.08);
 }
 
 /* ── URL — monospace link display ───────────────── */

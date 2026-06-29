@@ -39,7 +39,7 @@ export default function Navbar() {
           style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400, fontSize: '1.2rem', letterSpacing: '-.01em' }}
         >
           <span className="text-[#1A1A14]">Link</span>
-          <span className="text-[#FF6B2B]">Lens</span>
+          <span className="text-[#1A1A14]">Lens</span>
         </Link>
 
         {/* Desktop nav */}
@@ -112,7 +112,7 @@ export default function Navbar() {
             <Link
               to="/login"
               onClick={() => setOpen(false)}
-              className="flex items-center gap-2 text-sm text-[#FF6B2B] font-medium py-2 px-2"
+              className="flex items-center gap-2 text-sm text-[#1A1A14] font-medium py-2 px-2"
             >
               Login →
             </Link>

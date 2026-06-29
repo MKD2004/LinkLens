@@ -46,7 +46,7 @@ export default function Login() {
       {/* Warm spotlight */}
       <div
         className="pointer-events-none fixed inset-0 -z-10"
-        style={{ background: 'radial-gradient(ellipse 70% 40% at 50% 0%, rgba(255,107,43,0.05) 0%, transparent 60%)' }}
+        style={{ background: 'radial-gradient(ellipse 70% 40% at 50% 0%, rgba(26,26,20,0.04) 0%, transparent 60%)' }}
       />
 
       <div className="w-full max-w-md animate-fade-up">
@@ -58,7 +58,7 @@ export default function Login() {
             style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400, letterSpacing: '-.02em' }}
           >
             <span className="text-[#1A1A14]">Link</span>
-            <span className="text-[#FF6B2B]">Lens</span>
+            <span className="text-[#1A1A14]">Lens</span>
           </span>
           <p className="text-[#6B6B5E] text-sm mt-1.5" style={{ fontFamily: "'Instrument Sans', sans-serif" }}>
             {tab === 'login' ? 'Welcome back.' : 'Create your account.'}
@@ -82,7 +82,7 @@ export default function Login() {
                 className="flex-1 py-2 text-sm font-medium rounded-lg transition-all duration-200"
                 style={
                   tab === t
-                    ? { background: '#FF6B2B', color: '#fff', boxShadow: '0 2px 8px rgba(255,107,43,.3)' }
+                    ? { background: '#1A1A14', color: '#F9F8F5', boxShadow: '0 2px 8px rgba(26,26,20,.2)' }
                     : { background: 'transparent', color: '#6B6B5E' }
                 }
               >

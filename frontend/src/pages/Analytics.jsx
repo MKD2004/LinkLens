@@ -14,7 +14,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement,
   BarElement, ArcElement, Title, Tooltip, Legend, Filler)
 
 const BASE_URL = import.meta.env.VITE_API_URL
-const ORANGE = '#FF6B2B'
+const DARK = '#1A1A14'
 
 function fillDates(byDay) {
   if (!byDay || byDay.length === 0) return []
@@ -167,12 +167,12 @@ export default function Analytics() {
     datasets: [{
       label: 'Clicks',
       data: mergedByDay.map(d => d.count),
-      borderColor: ORANGE,
-      backgroundColor: 'rgba(255,107,43,.06)',
+      borderColor: DARK,
+      backgroundColor: 'rgba(26,26,20,.06)',
       fill: true,
       tension: 0.35,
       pointRadius: 3,
-      pointBackgroundColor: ORANGE,
+      pointBackgroundColor: DARK,
       pointBorderColor: '#FFFFFF',
       pointBorderWidth: 2,
     }],
@@ -183,8 +183,8 @@ export default function Analytics() {
     datasets: [{
       label: 'Clicks',
       data: byCountry.map(c => c.count),
-      backgroundColor: 'rgba(255,107,43,.5)',
-      hoverBackgroundColor: ORANGE,
+      backgroundColor: 'rgba(26,26,20,.5)',
+      hoverBackgroundColor: DARK,
       borderRadius: 5,
     }],
   }
@@ -193,7 +193,7 @@ export default function Analytics() {
     labels: byDevice.map(d => d.device),
     datasets: [{
       data: byDevice.map(d => d.count),
-      backgroundColor: ['#FF6B2B', '#FF9066', '#FFBA99'],
+      backgroundColor: ['#1A1A14', '#6B6B5E', '#B0ADA6'],
       borderWidth: 0,
       hoverOffset: 4,
     }],
@@ -326,7 +326,7 @@ export default function Analytics() {
                       <div className="flex-1 rounded-full overflow-hidden" style={{ height: 3, background: '#F3F1EC' }}>
                         <div
                           className="h-full rounded-full"
-                          style={{ width: `${(r.count / maxReferer) * 100}%`, background: ORANGE, transition: 'width .4s ease' }}
+                          style={{ width: `${(r.count / maxReferer) * 100}%`, background: DARK, transition: 'width .4s ease' }}
                         />
                       </div>
                       <span className="text-xs text-[#A8A89C] w-5 text-right shrink-0 font-mono">{r.count}</span>

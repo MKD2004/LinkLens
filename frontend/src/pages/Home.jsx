@@ -58,7 +58,7 @@ export default function Home() {
       {/* Warm spotlight */}
       <div
         className="pointer-events-none fixed inset-0 -z-10"
-        style={{ background: 'radial-gradient(ellipse 70% 42% at 50% 0%, rgba(255,107,43,0.05) 0%, transparent 65%)' }}
+        style={{ background: 'radial-gradient(ellipse 70% 42% at 50% 0%, rgba(26,26,20,0.04) 0%, transparent 65%)' }}
       />
 
       <div className="w-full max-w-[480px]">
@@ -70,7 +70,7 @@ export default function Home() {
             style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 400, letterSpacing: '-.02em' }}
           >
             Your links,<br />
-            under a lens<span className="text-[#FF6B2B]">.</span>
+            under a lens<span className="text-[#1A1A14]">.</span>
           </h1>
           <p className="text-[#6B6B5E] text-base">
             Shorten, share, and watch clicks roll in—live.
@@ -180,7 +180,7 @@ export default function Home() {
 
         {!isAuthenticated && (
           <p className="text-center mt-5 text-sm text-[#A8A89C] animate-fade-up-2">
-            <Link to="/login" className="text-[#FF6B2B] hover:text-[#E85A1A] transition-colors">
+            <Link to="/login" className="text-[#1A1A14] underline underline-offset-2 hover:opacity-70 transition-opacity">
               Sign in
             </Link>
             {' '}to track your links in real time

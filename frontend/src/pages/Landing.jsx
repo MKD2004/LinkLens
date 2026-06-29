@@ -76,7 +76,7 @@ function Nav() {
             </span>
             <span
               className={`ll-display tracking-tight transition-all duration-500 ${scrolled ? 'text-xl' : 'text-2xl'}`}
-              style={{ color: '#FF6B2B' }}
+              style={{ color: '#1A1A14' }}
             >
               Lens
             </span>
@@ -957,7 +957,7 @@ function Footer() {
             <div className="col-span-2">
               <a href="#" className="inline-flex items-center gap-1 mb-6">
                 <span className="ll-display text-2xl" style={{ color: FG }}>Link</span>
-                <span className="ll-display text-2xl" style={{ color: '#FF6B2B' }}>Lens</span>
+                <span className="ll-display text-2xl" style={{ color: FG }}>Lens</span>
                 <span className="ll-mono text-xs ml-1" style={{ color: MUTED }}>™</span>
               </a>
               <p className="leading-relaxed mb-8 max-w-xs" style={{ color: MUTED }}>
