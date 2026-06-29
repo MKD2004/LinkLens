@@ -13,29 +13,44 @@ export default function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-10 bg-white border-b border-gray-200">
+    <header
+      className="sticky top-0 z-50"
+      style={{
+        background: 'rgba(5,5,8,0.82)',
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
+        borderBottom: '1px solid rgba(37,37,51,0.7)',
+      }}
+    >
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-        <Link to="/" className="text-lg font-bold text-gray-900 tracking-tight">
-          LinkLens
+
+        {/* Logo */}
+        <Link
+          to="/"
+          className="flex items-center select-none"
+          style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: '1.1rem', letterSpacing: '-.02em' }}
+        >
+          <span className="text-[#E8E6FF]">Link</span>
+          <span className="text-[#7C6FF7]">Lens</span>
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden sm:flex items-center gap-6">
+        <nav className="hidden sm:flex items-center gap-4">
           {isAuthenticated ? (
             <>
-              <Link to="/dashboard" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+              <Link
+                to="/dashboard"
+                className="text-sm text-[#6B6A85] hover:text-[#E8E6FF] transition-colors duration-150"
+              >
                 Dashboard
               </Link>
-              <span className="text-sm text-gray-400 cursor-default">Analytics</span>
-              <button
-                onClick={handleLogout}
-                className="text-sm px-3 py-1.5 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors"
-              >
+              <span className="text-sm text-[#2E2E40] cursor-default select-none">Analytics</span>
+              <button onClick={handleLogout} className="btn-ghost px-3.5 py-1.5 text-sm">
                 Logout
               </button>
             </>
           ) : (
-            <Link to="/login" className="text-sm text-indigo-600 font-medium hover:underline">
+            <Link to="/login" className="btn-primary px-4 py-1.5 text-sm rounded-lg">
               Login
             </Link>
           )}
@@ -44,7 +59,8 @@ export default function Navbar() {
         {/* Mobile hamburger */}
         <button
           onClick={() => setOpen(o => !o)}
-          className="sm:hidden p-2 rounded-md text-gray-500 hover:bg-gray-100 transition-colors"
+          className="sm:hidden p-2 rounded-lg text-[#6B6A85] hover:text-[#E8E6FF] transition-colors"
+          style={{ background: open ? '#1A1A25' : 'transparent' }}
           aria-label="Toggle menu"
         >
           {open ? (
@@ -61,20 +77,25 @@ export default function Navbar() {
 
       {/* Mobile dropdown */}
       {open && (
-        <div className="sm:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-3">
+        <div
+          className="sm:hidden px-4 py-4 space-y-1 animate-fade-up"
+          style={{ borderTop: '1px solid #252533', background: '#0A0A0F' }}
+        >
           {isAuthenticated ? (
             <>
               <Link
                 to="/dashboard"
                 onClick={() => setOpen(false)}
-                className="block text-sm text-gray-600 hover:text-gray-900"
+                className="flex items-center gap-2 text-sm text-[#6B6A85] hover:text-[#E8E6FF] transition-colors py-2 px-2 rounded-lg hover:bg-[#1A1A25]"
               >
                 Dashboard
               </Link>
-              <span className="block text-sm text-gray-400">Analytics</span>
+              <span className="flex items-center gap-2 text-sm text-[#2E2E40] py-2 px-2 select-none">
+                Analytics
+              </span>
               <button
                 onClick={() => { setOpen(false); handleLogout() }}
-                className="block text-sm text-red-500 hover:text-red-600"
+                className="flex w-full items-center gap-2 text-sm text-[#F87171] hover:text-[#FF8787] transition-colors py-2 px-2 rounded-lg hover:bg-[rgba(248,113,113,.06)]"
               >
                 Logout
               </button>
@@ -83,9 +104,9 @@ export default function Navbar() {
             <Link
               to="/login"
               onClick={() => setOpen(false)}
-              className="block text-sm text-indigo-600 font-medium"
+              className="flex items-center gap-2 text-sm text-[#7C6FF7] font-medium py-2 px-2"
             >
-              Login
+              Login →
             </Link>
           )}
         </div>
