@@ -46,7 +46,7 @@ export default function Login() {
       {/* Spotlight */}
       <div
         className="pointer-events-none fixed inset-0 -z-10"
-        style={{ background: 'radial-gradient(ellipse 70% 40% at 50% 0%, rgba(124,111,247,0.09) 0%, transparent 60%)' }}
+        style={{ background: 'radial-gradient(ellipse 70% 40% at 50% 0%, rgba(255,107,43,0.08) 0%, transparent 60%)' }}
       />
 
       <div className="w-full max-w-md animate-fade-up">
@@ -57,10 +57,10 @@ export default function Login() {
             className="text-3xl select-none"
             style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, letterSpacing: '-.03em' }}
           >
-            <span className="text-[#E8E6FF]">Link</span>
-            <span className="text-[#7C6FF7]">Lens</span>
+            <span className="text-[#F0F6FF]">Link</span>
+            <span className="text-[#FF6B2B]">Lens</span>
           </span>
-          <p className="text-[#4A4A62] text-sm mt-1.5">
+          <p className="text-[#3A4E6A] text-sm mt-1.5">
             {tab === 'login' ? 'Welcome back.' : 'Create your account.'}
           </p>
         </div>
@@ -68,12 +68,12 @@ export default function Login() {
         {/* Card */}
         <div
           className="rounded-2xl p-7"
-          style={{ background: '#0F0F15', border: '1px solid #252533' }}
+          style={{ background: '#161D2E', border: '1px solid #243049' }}
         >
           {/* Tab switcher */}
           <div
             className="flex rounded-xl p-1 mb-6 gap-1"
-            style={{ background: '#1A1A25' }}
+            style={{ background: '#1E2A40' }}
           >
             {['login', 'register'].map(t => (
               <button
@@ -82,8 +82,8 @@ export default function Login() {
                 className="flex-1 py-2 text-sm font-medium rounded-lg transition-all duration-200"
                 style={
                   tab === t
-                    ? { background: '#7C6FF7', color: '#fff', boxShadow: '0 2px 8px rgba(124,111,247,.4)' }
-                    : { background: 'transparent', color: '#6B6A85' }
+                    ? { background: '#FF6B2B', color: '#fff', boxShadow: '0 2px 8px rgba(255,107,43,.4)' }
+                    : { background: 'transparent', color: '#5A6E8F' }
                 }
               >
                 {t === 'login' ? 'Login' : 'Register'}

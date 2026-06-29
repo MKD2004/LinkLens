@@ -14,7 +14,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement,
   BarElement, ArcElement, Title, Tooltip, Legend, Filler)
 
 const BASE_URL = import.meta.env.VITE_API_URL
-const VIOLET = '#7C6FF7'
+const ORANGE = '#FF6B2B'
 
 function fillDates(byDay) {
   if (!byDay || byDay.length === 0) return []
@@ -33,14 +33,14 @@ function SummaryCard({ label, value, children }) {
   return (
     <div
       className="rounded-xl p-4 card-hover"
-      style={{ background: '#0F0F15', border: '1px solid #252533' }}
+      style={{ background: '#161D2E', border: '1px solid #243049' }}
     >
-      <p className="text-xs text-[#4A4A62] font-medium mb-1 flex items-center gap-2 uppercase tracking-wider">
+      <p className="text-xs text-[#3A4E6A] font-medium mb-1 flex items-center gap-2 uppercase tracking-wider">
         {label}
         {children}
       </p>
       <p
-        className="text-2xl text-[#E8E6FF]"
+        className="text-2xl text-[#F0F6FF]"
         style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, letterSpacing: '-.02em' }}
       >
         {value ?? '—'}
@@ -53,15 +53,15 @@ function ChartCard({ title, children }) {
   return (
     <div
       className="rounded-xl p-5"
-      style={{ background: '#0F0F15', border: '1px solid #252533' }}
+      style={{ background: '#161D2E', border: '1px solid #243049' }}
     >
-      <p className="text-xs text-[#4A4A62] font-medium uppercase tracking-wider mb-5">{title}</p>
+      <p className="text-xs text-[#3A4E6A] font-medium uppercase tracking-wider mb-5">{title}</p>
       {children}
     </div>
   )
 }
 
-const darkTicks = { color: '#4A4A62', font: { family: 'Inter', size: 11 } }
+const darkTicks = { color: '#3A4E6A', font: { family: 'Inter', size: 11 } }
 const darkBorder = { color: 'transparent' }
 
 function chartOpts() {
@@ -71,18 +71,18 @@ function chartOpts() {
       legend: { display: false },
       title: { display: false },
       tooltip: {
-        backgroundColor: '#1A1A25',
-        borderColor: '#252533',
+        backgroundColor: '#1E2A40',
+        borderColor: '#243049',
         borderWidth: 1,
-        titleColor: '#E8E6FF',
-        bodyColor: '#6B6A85',
+        titleColor: '#F0F6FF',
+        bodyColor: '#5A6E8F',
         padding: 10,
         cornerRadius: 8,
       },
     },
     scales: {
       x: { grid: { display: false }, ticks: darkTicks, border: darkBorder },
-      y: { grid: { color: 'rgba(37,37,51,.6)' }, ticks: darkTicks, border: darkBorder },
+      y: { grid: { color: 'rgba(36,48,73,.6)' }, ticks: darkTicks, border: darkBorder },
     },
   }
 }
@@ -144,10 +144,10 @@ export default function Analytics() {
       <div className="max-w-5xl mx-auto animate-fade-up">
         <div
           className="rounded-xl p-12 text-center"
-          style={{ background: '#0F0F15', border: '1px solid rgba(248,113,113,.15)' }}
+          style={{ background: '#161D2E', border: '1px solid rgba(248,113,113,.15)' }}
         >
-          <p className="text-[#E8E6FF] font-medium mb-1.5">Failed to load analytics</p>
-          <p className="text-[#4A4A62] text-sm mb-7">{error}</p>
+          <p className="text-[#F0F6FF] font-medium mb-1.5">Failed to load analytics</p>
+          <p className="text-[#3A4E6A] text-sm mb-7">{error}</p>
           <button onClick={() => navigate('/dashboard')} className="btn-primary px-5 py-2.5 text-sm">
             ← Back to Dashboard
           </button>
@@ -166,13 +166,13 @@ export default function Analytics() {
     datasets: [{
       label: 'Clicks',
       data: mergedByDay.map(d => d.count),
-      borderColor: VIOLET,
-      backgroundColor: 'rgba(124,111,247,.1)',
+      borderColor: ORANGE,
+      backgroundColor: 'rgba(255,107,43,.1)',
       fill: true,
       tension: 0.35,
       pointRadius: 3,
-      pointBackgroundColor: VIOLET,
-      pointBorderColor: '#0F0F15',
+      pointBackgroundColor: ORANGE,
+      pointBorderColor: '#161D2E',
       pointBorderWidth: 2,
     }],
   }
@@ -182,8 +182,8 @@ export default function Analytics() {
     datasets: [{
       label: 'Clicks',
       data: byCountry.map(c => c.count),
-      backgroundColor: 'rgba(124,111,247,.6)',
-      hoverBackgroundColor: VIOLET,
+      backgroundColor: 'rgba(255,107,43,.6)',
+      hoverBackgroundColor: ORANGE,
       borderRadius: 5,
     }],
   }
@@ -192,7 +192,7 @@ export default function Analytics() {
     labels: byDevice.map(d => d.device),
     datasets: [{
       data: byDevice.map(d => d.count),
-      backgroundColor: ['#7C6FF7', '#9D93F8', '#BDB8FA'],
+      backgroundColor: ['#FF6B2B', '#FF9066', '#FFB899'],
       borderWidth: 0,
       hoverOffset: 4,
     }],
@@ -208,7 +208,7 @@ export default function Analytics() {
         </button>
         <div
           className="flex-1 flex items-center gap-3 rounded-xl px-4 py-2.5 min-w-0"
-          style={{ background: '#0F0F15', border: '1px solid #252533' }}
+          style={{ background: '#161D2E', border: '1px solid #243049' }}
         >
           <span className="url-glow text-sm flex-1 min-w-0 truncate">{shortUrl}</span>
           <button onClick={handleCopy} className="btn-primary shrink-0 px-3 py-1.5 text-xs rounded-lg">
@@ -220,7 +220,7 @@ export default function Analytics() {
       {isEmpty ? (
         <div
           className="rounded-2xl p-14 text-center animate-slide-in"
-          style={{ background: '#0F0F15', border: '1px solid #252533' }}
+          style={{ background: '#161D2E', border: '1px solid #243049' }}
         >
           {connected && (
             <div className="flex items-center justify-center gap-2 text-xs text-[#4ADE80] mb-6">
@@ -229,15 +229,15 @@ export default function Analytics() {
             </div>
           )}
           <p
-            className="text-lg text-[#E8E6FF] mb-2"
+            className="text-lg text-[#F0F6FF] mb-2"
             style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600 }}
           >
             No clicks yet
           </p>
-          <p className="text-[#4A4A62] text-sm mb-8">Share your link to start tracking.</p>
+          <p className="text-[#3A4E6A] text-sm mb-8">Share your link to start tracking.</p>
           <div
             className="flex items-center gap-3 rounded-xl px-4 py-3 max-w-sm mx-auto"
-            style={{ background: 'rgba(124,111,247,.07)', border: '1px solid rgba(124,111,247,.18)' }}
+            style={{ background: 'rgba(0,200,255,.05)', border: '1px solid rgba(0,200,255,.15)' }}
           >
             <span className="url-glow text-sm flex-1 min-w-0 break-all">{shortUrl}</span>
             <button onClick={handleCopy} className="btn-primary shrink-0 px-3 py-1.5 text-xs rounded-lg">
@@ -275,7 +275,7 @@ export default function Analytics() {
                   ...chartOpts(),
                   indexAxis: 'y',
                   scales: {
-                    x: { grid: { color: 'rgba(37,37,51,.6)' }, ticks: darkTicks, border: darkBorder },
+                    x: { grid: { color: 'rgba(36,48,73,.6)' }, ticks: darkTicks, border: darkBorder },
                     y: { grid: { display: false }, ticks: darkTicks, border: darkBorder },
                   },
                 }}
@@ -294,7 +294,7 @@ export default function Analytics() {
                       legend: {
                         position: 'bottom',
                         labels: {
-                          color: '#6B6A85',
+                          color: '#5A6E8F',
                           font: { family: 'Inter', size: 12 },
                           padding: 18,
                           usePointStyle: true,
@@ -311,24 +311,24 @@ export default function Analytics() {
 
             <ChartCard title="Top referrers">
               {byReferer.length === 0 ? (
-                <p className="text-[#3A3A52] text-sm text-center py-10">No referrer data yet</p>
+                <p className="text-[#2A3A52] text-sm text-center py-10">No referrer data yet</p>
               ) : (
                 <div className="space-y-3.5">
                   {byReferer.map((r, i) => (
                     <div key={i} className="flex items-center gap-3">
                       <span
-                        className="text-xs text-[#6B6A85] w-28 truncate shrink-0"
+                        className="text-xs text-[#5A6E8F] w-28 truncate shrink-0"
                         style={{ fontFamily: "'JetBrains Mono', monospace" }}
                       >
                         {r.referer}
                       </span>
-                      <div className="flex-1 rounded-full overflow-hidden" style={{ height: 3, background: '#1A1A25' }}>
+                      <div className="flex-1 rounded-full overflow-hidden" style={{ height: 3, background: '#1E2A40' }}>
                         <div
                           className="h-full rounded-full"
-                          style={{ width: `${(r.count / maxReferer) * 100}%`, background: VIOLET, transition: 'width .4s ease' }}
+                          style={{ width: `${(r.count / maxReferer) * 100}%`, background: ORANGE, transition: 'width .4s ease' }}
                         />
                       </div>
-                      <span className="text-xs text-[#4A4A62] w-5 text-right shrink-0 font-mono">{r.count}</span>
+                      <span className="text-xs text-[#3A4E6A] w-5 text-right shrink-0 font-mono">{r.count}</span>
                     </div>
                   ))}
                 </div>

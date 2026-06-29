@@ -16,10 +16,10 @@ export default function Navbar() {
     <header
       className="sticky top-0 z-50"
       style={{
-        background: 'rgba(5,5,8,0.82)',
+        background: 'rgba(13,17,23,0.88)',
         backdropFilter: 'blur(14px)',
         WebkitBackdropFilter: 'blur(14px)',
-        borderBottom: '1px solid rgba(37,37,51,0.7)',
+        borderBottom: '1px solid rgba(36,48,73,0.8)',
       }}
     >
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
@@ -30,8 +30,8 @@ export default function Navbar() {
           className="flex items-center select-none"
           style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: '1.1rem', letterSpacing: '-.02em' }}
         >
-          <span className="text-[#E8E6FF]">Link</span>
-          <span className="text-[#7C6FF7]">Lens</span>
+          <span className="text-[#F0F6FF]">Link</span>
+          <span className="text-[#FF6B2B]">Lens</span>
         </Link>
 
         {/* Desktop nav */}
@@ -40,11 +40,11 @@ export default function Navbar() {
             <>
               <Link
                 to="/dashboard"
-                className="text-sm text-[#6B6A85] hover:text-[#E8E6FF] transition-colors duration-150"
+                className="text-sm text-[#5A6E8F] hover:text-[#F0F6FF] transition-colors duration-150"
               >
                 Dashboard
               </Link>
-              <span className="text-sm text-[#2E2E40] cursor-default select-none">Analytics</span>
+              <span className="text-sm text-[#243049] cursor-default select-none">Analytics</span>
               <button onClick={handleLogout} className="btn-ghost px-3.5 py-1.5 text-sm">
                 Logout
               </button>
@@ -59,8 +59,8 @@ export default function Navbar() {
         {/* Mobile hamburger */}
         <button
           onClick={() => setOpen(o => !o)}
-          className="sm:hidden p-2 rounded-lg text-[#6B6A85] hover:text-[#E8E6FF] transition-colors"
-          style={{ background: open ? '#1A1A25' : 'transparent' }}
+          className="sm:hidden p-2 rounded-lg text-[#5A6E8F] hover:text-[#F0F6FF] transition-colors"
+          style={{ background: open ? '#1E2A40' : 'transparent' }}
           aria-label="Toggle menu"
         >
           {open ? (
@@ -79,18 +79,18 @@ export default function Navbar() {
       {open && (
         <div
           className="sm:hidden px-4 py-4 space-y-1 animate-fade-up"
-          style={{ borderTop: '1px solid #252533', background: '#0A0A0F' }}
+          style={{ borderTop: '1px solid #243049', background: '#111822' }}
         >
           {isAuthenticated ? (
             <>
               <Link
                 to="/dashboard"
                 onClick={() => setOpen(false)}
-                className="flex items-center gap-2 text-sm text-[#6B6A85] hover:text-[#E8E6FF] transition-colors py-2 px-2 rounded-lg hover:bg-[#1A1A25]"
+                className="flex items-center gap-2 text-sm text-[#5A6E8F] hover:text-[#F0F6FF] transition-colors py-2 px-2 rounded-lg hover:bg-[#1E2A40]"
               >
                 Dashboard
               </Link>
-              <span className="flex items-center gap-2 text-sm text-[#2E2E40] py-2 px-2 select-none">
+              <span className="flex items-center gap-2 text-sm text-[#243049] py-2 px-2 select-none">
                 Analytics
               </span>
               <button
@@ -104,7 +104,7 @@ export default function Navbar() {
             <Link
               to="/login"
               onClick={() => setOpen(false)}
-              className="flex items-center gap-2 text-sm text-[#7C6FF7] font-medium py-2 px-2"
+              className="flex items-center gap-2 text-sm text-[#FF6B2B] font-medium py-2 px-2"
             >
               Login →
             </Link>

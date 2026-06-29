@@ -45,18 +45,18 @@ export default function LinkCard({ link, onToggle, onDelete }) {
   return (
     <div
       className="card-hover rounded-xl p-4 space-y-3"
-      style={{ background: '#0F0F15', border: '1px solid #252533' }}
+      style={{ background: '#161D2E', border: '1px solid #243049' }}
     >
       {/* Top row */}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          {/* Short URL — the signature element */}
+          {/* Short URL — cyan glow signature */}
           <p className="url-glow text-sm font-medium truncate">{shortUrl}</p>
 
           {/* Original URL with tooltip + external link */}
           <div className="flex items-center gap-1.5 mt-1 min-w-0">
             <p
-              className="text-[#3A3A52] text-xs truncate"
+              className="text-[#2A3A52] text-xs truncate"
               style={{ fontFamily: "'JetBrains Mono', monospace" }}
               title={link.originalUrl}
             >
@@ -66,7 +66,7 @@ export default function LinkCard({ link, onToggle, onDelete }) {
               href={link.originalUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="shrink-0 text-[#2E2E42] hover:text-[#7C6FF7] transition-colors"
+              className="shrink-0 text-[#1C2A3F] hover:text-[#FF6B2B] transition-colors"
               onClick={e => e.stopPropagation()}
             >
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -81,7 +81,7 @@ export default function LinkCard({ link, onToggle, onDelete }) {
         <div className="flex items-center gap-2 shrink-0">
           <span
             className="text-xs px-2 py-0.5 rounded-full font-mono"
-            style={{ background: 'rgba(124,111,247,.1)', color: '#A89EF8', border: '1px solid rgba(124,111,247,.15)' }}
+            style={{ background: 'rgba(0,200,255,.08)', color: '#00C8FF', border: '1px solid rgba(0,200,255,.15)' }}
           >
             {link.clickCount}
           </span>
@@ -99,7 +99,7 @@ export default function LinkCard({ link, onToggle, onDelete }) {
 
       {/* Bottom row */}
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs text-[#2E2E42] shrink-0" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+        <span className="text-xs text-[#1C2A3F] shrink-0" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
           {createdAt}
         </span>
 

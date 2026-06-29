@@ -29,7 +29,7 @@ export default function App() {
     <ErrorBoundary>
       <AuthProvider>
         <BrowserRouter>
-          <div className="min-h-screen bg-[#050508] hero-grid">
+          <div className="min-h-screen bg-[#0D1117] hero-grid">
             <Navbar />
             <main className="max-w-6xl mx-auto px-4 py-8">
               <AppRoutes />

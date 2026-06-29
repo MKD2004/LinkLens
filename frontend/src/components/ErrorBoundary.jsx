@@ -9,7 +9,7 @@ export default class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-[#050508] hero-grid px-4">
+        <div className="min-h-screen flex items-center justify-center bg-[#0D1117] hero-grid px-4">
           <div className="text-center max-w-sm animate-fade-up">
             <div
               className="w-16 h-16 mx-auto mb-6 rounded-2xl flex items-center justify-center"
@@ -21,12 +21,12 @@ export default class ErrorBoundary extends Component {
               </svg>
             </div>
             <h2
-              className="text-2xl text-[#E8E6FF] mb-2"
+              className="text-2xl text-[#F0F6FF] mb-2"
               style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600 }}
             >
               Something went wrong
             </h2>
-            <p className="text-[#6B6A85] text-sm mb-8">
+            <p className="text-[#5A6E8F] text-sm mb-8">
               An unexpected error occurred. Refresh to continue.
             </p>
             <button
