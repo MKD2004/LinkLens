@@ -23,39 +23,36 @@ Key capabilities:
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                          Client (Browser)                        │
-│                                                                  │
-│   React 19 · Vite · Tailwind v4 · Chart.js · qrcode.react      │
-│   ┌──────────┐  ┌───────────┐  ┌────────────┐  ┌───────────┐  │
-│   │ Landing  │  │ Dashboard │  │  Analytics │  │  Login /  │  │
-│   │  + Hero  │  │  (CRUD)   │  │  (Charts)  │  │ Register  │  │
-│   └──────────┘  └───────────┘  └────────────┘  └───────────┘  │
-└───────────────────────────┬────────────────────────┬────────────┘
-                  REST / JSON │                        │ SSE stream
-                  (JWT Bearer)│                        │ (live clicks)
-                             ▼                        ▼
-┌──────────────────────────────────────────────────────────────────┐
-│                    Express 5 API  (Node.js 20)                   │
-│                                                                  │
-│  POST /api/links  ──►  rate-limiter  ──►  nanoid(6)  ──►  DB    │
-│  GET  /r/:id      ──►  Redis cache?  ──►  301 redirect          │
-│                          │   MISS          recordClick()         │
-│                          │                 ├─ geoip-lite         │
-│                          ▼                 ├─ ua-parser-js       │
-│                   MongoDB Atlas            └─ SSE broadcast      │
-│                   ┌────────────┐                                 │
-│                   │   users    │                                 │
-│                   │   links    │                                 │
-│                   │clickEvents │                                 │
-│                   └────────────┘                                 │
-│                                                                  │
-│                   Redis (ioredis)                                │
-│                   └─ link:{shortId} TTL 86400s                  │
-└──────────────────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph Client["Client — React 19, Vite, Tailwind"]
+        A[Landing]
+        B[Dashboard]
+        C[Analytics]
+        D[Auth]
+    end
 
-Hosting:  Frontend → Vercel   |   Backend → Render   |   DB → MongoDB Atlas
+    subgraph API["Express API — Node.js"]
+        E[Shorten + Redirect]
+        F[Analytics Engine]
+        G[Click Tracker]
+        H[Rate Limiter]
+    end
+
+    subgraph Mongo["MongoDB Atlas"]
+        I[(users)]
+        J[(links)]
+        K[(clickEvents)]
+    end
+
+    subgraph Cache["Redis Cloud"]
+        L[(link cache, TTL 24h)]
+    end
+
+    Client -->|REST / JSON| API
+    Client -->|SSE stream| G
+    API --> Mongo
+    API --> Cache
 ```
 
 ---
