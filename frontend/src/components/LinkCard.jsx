@@ -18,7 +18,7 @@ export default function LinkCard({ link, onToggle, onDelete }) {
   const createdAt = new Date(link.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 
   function handleCopy() {
-    navigator.clipboard.writeText(shortUrl)
+    navigator.clipboard?.writeText(shortUrl).catch(() => {})
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
