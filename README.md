@@ -23,37 +23,7 @@ Key capabilities:
 
 ## Architecture
 
-```mermaid
-graph TB
-    subgraph Client["Client — React 19, Vite, Tailwind"]
-        A[Landing]
-        B[Dashboard]
-        C[Analytics]
-        D[Auth]
-    end
-
-    subgraph API["Express API — Node.js"]
-        E[Shorten + Redirect]
-        F[Analytics Engine]
-        G[Click Tracker]
-        H[Rate Limiter]
-    end
-
-    subgraph Mongo["MongoDB Atlas"]
-        I[(users)]
-        J[(links)]
-        K[(clickEvents)]
-    end
-
-    subgraph Cache["Redis Cloud"]
-        L[(link cache, TTL 24h)]
-    end
-
-    Client -->|REST / JSON| API
-    Client -->|SSE stream| G
-    API --> Mongo
-    API --> Cache
-```
+![LinkLens Architecture](linklens_architecture.png)
 
 ---
 
@@ -220,3 +190,24 @@ LinkLens/
         ├── contexts/        # AuthContext (JWT + user state)
         └── pages/           # Landing, Login, Dashboard, Analytics
 ```
+
+---
+
+## Roadmap
+
+LinkLens is built with production-grade architecture — Redis caching, async click tracking, sliding-window rate limiting — but is intentionally scoped as an MVP. Planned extensions if taken further:
+
+**Near-term**
+- Click fraud / bot filtering on analytics
+- Password-protected short links
+- UTM parameter builder
+
+**Medium-term**
+- Custom domains (wildcard DNS, per-tenant domain mapping)
+- Team workspaces with role-based access (admin / editor / viewer)
+- Webhook support for click events
+- Link-in-bio landing pages
+
+**Long-term**
+- Stripe billing with usage-based tiers
+- Production SLA: paid hosting tier, uptime monitoring, alerting
