@@ -6,7 +6,7 @@ import validate, { registerSchema, loginSchema } from "../middleware/validate.js
 
 const router = Router();
 
-router.post("/register", validate(registerSchema), async (req, res) => {
+router.post("/register", validate(registerSchema), async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
 
@@ -38,11 +38,13 @@ router.post("/register", validate(registerSchema), async (req, res) => {
       user: { id: user._id, name: user.name, email: user.email },
     });
   } catch (error) {
-    res.status(500).json({ error: "server_error", message: error.message });
+    // Hand off to the centralized errorHandler, which gates internal messages
+    // behind NODE_ENV. Responding here would leak err.message in production.
+    next(error);
   }
 });
 
-router.post("/login", validate(loginSchema), async (req, res) => {
+router.post("/login", validate(loginSchema), async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -71,7 +73,9 @@ router.post("/login", validate(loginSchema), async (req, res) => {
       user: { id: user._id, name: user.name, email: user.email },
     });
   } catch (error) {
-    res.status(500).json({ error: "server_error", message: error.message });
+    // Hand off to the centralized errorHandler, which gates internal messages
+    // behind NODE_ENV. Responding here would leak err.message in production.
+    next(error);
   }
 });
 

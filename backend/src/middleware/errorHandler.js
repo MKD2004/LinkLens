@@ -21,7 +21,9 @@ export default function errorHandler(err, req, res, next) {
     return res.status(401).json({ error: "unauthorized", message: "Token expired" });
   }
 
-  const isDev = process.env.NODE_ENV === "development";
+  // Matches index.js: anything that isn't explicitly production counts as dev,
+  // so an unset NODE_ENV locally still shows real messages.
+  const isDev = process.env.NODE_ENV !== "production";
   return res.status(500).json({
     error: "server_error",
     message: isDev ? err.message : "Something went wrong",

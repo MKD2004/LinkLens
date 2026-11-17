@@ -12,7 +12,7 @@ import auth from "../middleware/auth.js";
 const router = Router();
 const nanoid = customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 6);
 
-router.post("/api/links", shortenLimiter, validate(createLinkSchema), async (req, res) => {
+router.post("/api/links", shortenLimiter, validate(createLinkSchema), async (req, res, next) => {
   try {
     let userId = null;
     const authHeader = req.headers.authorization;
@@ -54,18 +54,33 @@ router.post("/api/links", shortenLimiter, validate(createLinkSchema), async (req
       createdAt: link.createdAt,
     });
   } catch (error) {
-    res.status(500).json({ error: "server_error", message: error.message });
+    // Hand off to the centralized errorHandler, which gates internal messages
+    // behind NODE_ENV. Responding here would leak err.message in production.
+    next(error);
   }
 });
 
-router.get("/r/:shortId", redirectLimiter, async (req, res) => {
+router.get("/r/:shortId", redirectLimiter, async (req, res, next) => {
   try {
     const { shortId } = req.params;
 
-    const cached = await redis.get(`link:${shortId}`);
+    // 302 + no-store: the destination can change and every click must reach us
+    // to be counted. A 301 is cached by the browser indefinitely, which both
+    // undercounts analytics and makes the mapping permanent.
+    res.set("Cache-Control", "no-store");
+
+    // Cache read is best effort — if Redis is unreachable we pay one extra
+    // MongoDB query, not the request. Never let the cache take down redirects.
+    let cached = null;
+    try {
+      cached = await redis.get(`link:${shortId}`);
+    } catch (err) {
+      console.error(`Cache read failed for ${shortId}, falling back to MongoDB: ${err.message}`);
+    }
+
     if (cached) {
       console.log(`Cache HIT: ${shortId}`);
-      res.redirect(301, cached);
+      res.redirect(302, cached);
       recordClick(shortId, req);
       return;
     }
@@ -84,17 +99,23 @@ router.get("/r/:shortId", redirectLimiter, async (req, res) => {
       return res.status(410).json({ error: "expired", message: "This link has expired" });
     }
 
-    await redis.setex(`link:${shortId}`, 86400, link.originalUrl);
-    console.log(`Cache MISS — cached: ${shortId}`);
+    try {
+      await redis.setex(`link:${shortId}`, 86400, link.originalUrl);
+      console.log(`Cache MISS — cached: ${shortId}`);
+    } catch (err) {
+      console.error(`Cache write failed for ${shortId}: ${err.message}`);
+    }
 
-    res.redirect(301, link.originalUrl);
+    res.redirect(302, link.originalUrl);
     recordClick(shortId, req);
   } catch (error) {
-    res.status(500).json({ error: "server_error", message: error.message });
+    // Hand off to the centralized errorHandler, which gates internal messages
+    // behind NODE_ENV. Responding here would leak err.message in production.
+    next(error);
   }
 });
 
-router.get("/api/links", auth, async (req, res) => {
+router.get("/api/links", auth, async (req, res, next) => {
   try {
     const page = Math.max(1, parseInt(req.query.page) || 1);
     const limit = Math.min(50, Math.max(1, parseInt(req.query.limit) || 10));
@@ -116,11 +137,13 @@ router.get("/api/links", auth, async (req, res) => {
 
     res.json({ links: result, total, page, totalPages: Math.ceil(total / limit) });
   } catch (error) {
-    res.status(500).json({ error: "server_error", message: error.message });
+    // Hand off to the centralized errorHandler, which gates internal messages
+    // behind NODE_ENV. Responding here would leak err.message in production.
+    next(error);
   }
 });
 
-router.patch("/api/links/:shortId/toggle", auth, async (req, res) => {
+router.patch("/api/links/:shortId/toggle", auth, async (req, res, next) => {
   try {
     const { shortId } = req.params;
     const link = await Link.findOne({ shortId, userId: req.user.userId });
@@ -134,11 +157,13 @@ router.patch("/api/links/:shortId/toggle", auth, async (req, res) => {
 
     res.json({ shortId, isActive: link.isActive });
   } catch (error) {
-    res.status(500).json({ error: "server_error", message: error.message });
+    // Hand off to the centralized errorHandler, which gates internal messages
+    // behind NODE_ENV. Responding here would leak err.message in production.
+    next(error);
   }
 });
 
-router.delete("/api/links/:shortId", auth, async (req, res) => {
+router.delete("/api/links/:shortId", auth, async (req, res, next) => {
   try {
     const { shortId } = req.params;
     const link = await Link.findOne({ shortId, userId: req.user.userId });
@@ -154,12 +179,21 @@ router.delete("/api/links/:shortId", auth, async (req, res) => {
 
     res.json({ message: "Link deleted" });
   } catch (error) {
-    res.status(500).json({ error: "server_error", message: error.message });
+    // Hand off to the centralized errorHandler, which gates internal messages
+    // behind NODE_ENV. Responding here would leak err.message in production.
+    next(error);
   }
 });
 
+// Invalidation is best effort for the same reason reads are: MongoDB is the
+// source of truth, so a cache outage must not fail the write. Logged loudly
+// because the stale entry can outlive the change by up to the 24h TTL.
 export async function clearLinkCache(shortId) {
-  await redis.del(`link:${shortId}`);
+  try {
+    await redis.del(`link:${shortId}`);
+  } catch (err) {
+    console.error(`Cache invalidation failed for ${shortId} — entry may serve stale for up to 24h: ${err.message}`);
+  }
 }
 
 export default router;

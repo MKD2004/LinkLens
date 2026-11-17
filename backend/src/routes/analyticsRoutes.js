@@ -5,7 +5,7 @@ import auth from "../middleware/auth.js";
 
 const router = Router();
 
-router.get("/links/:shortId/analytics", auth, async (req, res) => {
+router.get("/links/:shortId/analytics", auth, async (req, res, next) => {
   try {
     const { shortId } = req.params;
 
@@ -57,7 +57,9 @@ router.get("/links/:shortId/analytics", auth, async (req, res) => {
       byReferer: byReferer.map((r) => ({ referer: r._id || "Direct", count: r.count })),
     });
   } catch (error) {
-    res.status(500).json({ error: "server_error", message: error.message });
+    // Hand off to the centralized errorHandler, which gates internal messages
+    // behind NODE_ENV. Responding here would leak err.message in production.
+    next(error);
   }
 });
 

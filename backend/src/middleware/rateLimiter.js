@@ -10,8 +10,16 @@ export default function createRateLimiter({ limit, windowSecs, keyPrefix }) {
       pipeline.incr(key);
       pipeline.ttl(key);
       const results = await pipeline.exec();
-      const count = results[0][1];
-      const ttl = results[1][1];
+      const count = results?.[0]?.[1];
+      const ttl = results?.[1]?.[1];
+
+      // Redis unreachable: exec resolves with error entries rather than
+      // throwing. Without a count there is nothing to limit on, so allow the
+      // request through rather than advertising a bogus NaN budget.
+      if (typeof count !== "number") {
+        console.error(`Rate limiter unavailable for ${keyPrefix} — allowing request`);
+        return next();
+      }
 
       if (ttl === -1) {
         await redis.expire(key, windowSecs);

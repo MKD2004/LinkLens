@@ -22,8 +22,10 @@ export default function useSSE(shortId, token) {
     }
 
     source.onerror = () => {
+      // Do NOT close() here. EventSource reconnects on its own after a dropped
+      // connection, and close() cancels that permanently, killing the live feed
+      // until remount. A non-200 (e.g. bad token) fails without retrying anyway.
       setConnected(false)
-      source.close()
     }
 
     return () => {
