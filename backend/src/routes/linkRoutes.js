@@ -11,6 +11,7 @@ import auth from "../middleware/auth.js";
 
 const router = Router();
 const nanoid = customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 6);
+const CACHE_TTL_SECS = 86400;
 
 router.post("/api/links", shortenLimiter, validate(createLinkSchema), async (req, res, next) => {
   try {
@@ -99,9 +100,19 @@ router.get("/r/:shortId", redirectLimiter, async (req, res, next) => {
       return res.status(410).json({ error: "expired", message: "This link has expired" });
     }
 
+    // The cache hit path never re-checks expiresAt, so a cache entry must not
+    // outlive the link: cap the TTL at the time remaining until expiry and let
+    // Redis evict the key at the exact moment the link expires.
+    let ttl = CACHE_TTL_SECS;
+    if (link.expiresAt) {
+      ttl = Math.min(ttl, Math.floor((link.expiresAt.getTime() - Date.now()) / 1000));
+    }
+
     try {
-      await redis.setex(`link:${shortId}`, 86400, link.originalUrl);
-      console.log(`Cache MISS — cached: ${shortId}`);
+      if (ttl > 0) {
+        await redis.setex(`link:${shortId}`, ttl, link.originalUrl);
+        console.log(`Cache MISS — cached: ${shortId} (ttl ${ttl}s)`);
+      }
     } catch (err) {
       console.error(`Cache write failed for ${shortId}: ${err.message}`);
     }
