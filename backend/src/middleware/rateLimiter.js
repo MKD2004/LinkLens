@@ -3,8 +3,11 @@ import redis from "../services/redis.js";
 export default function createRateLimiter({ limit, windowSecs, keyPrefix }) {
   return async (req, res, next) => {
     try {
-      const ip = req.headers["x-forwarded-for"]?.split(",")[0].trim() || req.ip;
-      const key = `${keyPrefix}:${ip}`;
+      // req.ip, not the raw x-forwarded-for header: the client controls the
+      // leftmost XFF entry, so keying on it lets anyone mint a fresh rate-limit
+      // bucket per request. With `trust proxy` set to 1 (index.js), Express
+      // takes the address our own proxy appended, which can't be spoofed.
+      const key = `${keyPrefix}:${req.ip}`;
 
       const pipeline = redis.pipeline();
       pipeline.incr(key);

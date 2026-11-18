@@ -6,7 +6,9 @@ import { emitClick } from "./sse.js";
 
 export default async function recordClick(shortId, req) {
   try {
-    const rawIp = req.headers["x-forwarded-for"]?.split(",")[0].trim() || req.ip;
+    // req.ip honours `trust proxy` (index.js); the leftmost x-forwarded-for
+    // entry is client-controlled and would let visitors fake their location.
+    const rawIp = req.ip;
     const hashedIp = createHash("sha256").update(rawIp).digest("hex");
 
     const parser = new UAParser(req.headers["user-agent"]);
