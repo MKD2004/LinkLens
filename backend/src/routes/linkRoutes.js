@@ -12,6 +12,7 @@ import auth from "../middleware/auth.js";
 const router = Router();
 const nanoid = customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 6);
 const CACHE_TTL_SECS = 86400;
+const MAX_ID_ATTEMPTS = 5;
 
 router.post("/api/links", shortenLimiter, validate(createLinkSchema), async (req, res, next) => {
   try {
@@ -28,25 +29,26 @@ router.post("/api/links", shortenLimiter, validate(createLinkSchema), async (req
 
     const { url, customAlias, expiresAt } = req.body;
 
-    let shortId;
+    const linkData = { originalUrl: url, userId, expiresAt: expiresAt || null };
+    if (customAlias) linkData.customAlias = customAlias;
 
-    if (customAlias) {
-      const existing = await Link.findOne({ shortId: customAlias });
-      if (existing) {
-        return res.status(409).json({ error: "conflict", message: "Custom alias already taken" });
-      }
-      shortId = customAlias;
-    } else {
-      let collision = true;
-      while (collision) {
-        shortId = nanoid();
-        collision = await Link.findOne({ shortId });
+    // The unique index on shortId is the only real guard against duplicates:
+    // a findOne-then-create check is racy, since two concurrent requests can
+    // both see an ID as free. So insert directly and treat a duplicate-key
+    // error (11000) as "taken" — 409 for a custom alias, retry with a fresh
+    // ID for a generated one.
+    let link;
+    for (let attempt = 1; !link; attempt++) {
+      try {
+        link = await Link.create({ ...linkData, shortId: customAlias || nanoid() });
+      } catch (err) {
+        if (err.code !== 11000) throw err;
+        if (customAlias) {
+          return res.status(409).json({ error: "conflict", message: "Custom alias already taken" });
+        }
+        if (attempt >= MAX_ID_ATTEMPTS) throw err;
       }
     }
-
-    const linkData = { shortId, originalUrl: url, userId, expiresAt: expiresAt || null };
-    if (customAlias) linkData.customAlias = customAlias;
-    const link = await Link.create(linkData);
 
     res.status(201).json({
       shortId: link.shortId,
